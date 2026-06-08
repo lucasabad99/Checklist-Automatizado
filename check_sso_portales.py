@@ -87,8 +87,8 @@ SELECTORES_DASHBOARD = [
     "header",
 ]
 
-TIMEOUT_MS           = 30_000
-TIMEOUT_DASHBOARD_MS = 25_000
+TIMEOUT_MS           = 20_000
+TIMEOUT_DASHBOARD_MS = 20_000
 POLL_MS              = 300
 
 PROFILE_DIR   = Path(__file__).parent / "edge_profile_sso_portales"
