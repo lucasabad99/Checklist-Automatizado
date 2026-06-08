@@ -15,7 +15,7 @@ Requisitos:
     playwright install msedge
 
 Uso:
-    python check_humand.py
+    python check_humandSSO.py
 """
 
 from playwright.sync_api import sync_playwright
@@ -30,8 +30,6 @@ URL            = "https://app.humand.co/feed"
 URL_ESPERADA_CONTIENE = "humand.co/feed"   # la URL final debe contener esto
 
 # Selector / texto que aparece solo cuando el feed ya cargó (no durante el splash).
-# Lo usamos para evitar capturar la pantalla del loader "hu".
-# Probamos varios candidatos por si Humand cambia algo:
 SELECTOR_FEED_LISTO = [
     "text=Novedades",       # título principal del feed
     "text=Comunicados",     # ítem del sidebar
@@ -85,7 +83,6 @@ def check_sso():
                 return False
 
             # Verificación 2: esperar a que el feed termine de renderizar
-            # Probamos los selectores en orden hasta que alguno aparezca.
             print(f"[{SITIO_NOMBRE}] Esperando que el feed renderice...")
             feed_listo = False
             for selector in SELECTOR_FEED_LISTO:
@@ -109,7 +106,7 @@ def check_sso():
                 return False
 
             # Pequeño margen extra para que terminen de pintar los componentes
-            pagina.wait_for_timeout(1500)
+            pagina.wait_for_timeout(4000)
 
             # Si llegó hasta acá, todo OK
             pagina.screenshot(path=str(screenshot_path), full_page=True)
@@ -127,7 +124,6 @@ def check_sso():
             return False
 
         finally:
-            input("\n>> Presioná Enter para cerrar el navegador... ")
             contexto.close()
 
 

@@ -23,6 +23,8 @@ MAIL_CC           = ""                         # ← CC opcional (ej: "jefe@peco
 NOMBRE_REMITENTE  = "Lucas Abad"
 CARGO_REMITENTE   = "IT & Innovación"
 
+TOTAL_PASOS = 7
+
 # ═════════════════════════════════════════════════════════════════════════════
 #  REGISTRO CENTRAL DE RESULTADOS
 # ═════════════════════════════════════════════════════════════════════════════
@@ -44,37 +46,18 @@ def _reg(nombre: str, ok: bool, detalle: str = "", items: list = None):
     print(f"\n  {icono} [{estado}]  {nombre}{det}")
 
 
-def _separador(num: int, total: int, titulo: str):
+def _separador(num: int, titulo: str):
     print("\n" + "═" * 72)
-    print(f"  PASO {num}/{total} — {titulo}")
+    print(f"  PASO {num}/{TOTAL_PASOS} — {titulo}")
     print("═" * 72)
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-#  PASO 1 — HTTP Status
-# ═════════════════════════════════════════════════════════════════════════════
-
-def paso_http_status():
-    _separador(1, 7, "Verificación de sitios web")
-    try:
-        from check_http_status import correr_verificacion, generar_resumen, guardar_log
-        items      = correr_verificacion()
-        resumen    = generar_resumen(items)
-        guardar_log(resumen, items)
-        errores    = [r for r in items if r["estado"] == "ERROR"]
-        ok_n       = len(items) - len(errores)
-        _reg("Sitios Web Corporativos", len(errores) == 0,
-             f"{ok_n}/{len(items)} sitios responden correctamente", items=items)
-    except Exception as e:
-        _reg("Sitios Web Corporativos", False, f"{type(e).__name__}: {e}")
-
-
-# ═════════════════════════════════════════════════════════════════════════════
-#  PASO 2 — Certificados SSL
+#  PASO 1 — Certificados SSL
 # ═════════════════════════════════════════════════════════════════════════════
 
 def paso_certificados():
-    _separador(2, 7, "Verificación de certificados SSL")
+    _separador(1, "Verificación de certificados SSL")
     try:
         from check_certificados import check_certificado, imprimir_resultado, URLS
 
@@ -113,11 +96,72 @@ def paso_certificados():
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-#  PASO 3 — Humand SSO
+#  PASO 2 — 3CX Llamadas
+# ═════════════════════════════════════════════════════════════════════════════
+
+def paso_3cx():
+    _separador(2, "Verificación de llamadas salientes (3CX Phone)")
+    try:
+        from check_Llamadas3cx import check_3cx
+        ok = check_3cx()
+        _reg("Telefonía IP — 3CX", ok, "Screenshot guardado en ./evidencias/")
+    except Exception as e:
+        _reg("Telefonía IP — 3CX", False, f"{type(e).__name__}: {e}")
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+#  PASO 3 — Citrix RDP
+# ═════════════════════════════════════════════════════════════════════════════
+
+def paso_citrix_rdp():
+    _separador(3, "Acceso Citrix / Remote Desktop Connection")
+    try:
+        from check_citrix import check_citrix_rdp
+        ok = check_citrix_rdp()
+        _reg("Citrix / Remote Desktop", ok, "Screenshots guardados en ./evidencias/")
+    except SystemExit as e:
+        _reg("Citrix / Remote Desktop", e.code == 0)
+    except Exception as e:
+        _reg("Citrix / Remote Desktop", False, f"{type(e).__name__}: {e}")
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+#  PASO 4 — SAP Login
+# ═════════════════════════════════════════════════════════════════════════════
+
+def paso_sap():
+    _separador(4, "Login SAP ECC Producción")
+    try:
+        from sap_login_check import check_sap_login
+        resultado = check_sap_login()
+        _reg("SAP ECC Producción", resultado == "OK")
+    except SystemExit as e:
+        _reg("SAP ECC Producción", e.code == 0, "Proceso terminó con sys.exit")
+    except Exception as e:
+        _reg("SAP ECC Producción", False, f"{type(e).__name__}: {e}")
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+#  PASO 5 — SSO Portales (Facilities + Compras)
+# ═════════════════════════════════════════════════════════════════════════════
+
+def paso_sso_portales():
+    _separador(5, "Acceso a portales internos (Facilities + Compras)")
+    try:
+        from check_sso_portales import check_sso_portales
+        ok = check_sso_portales()
+        _reg("Portales Internos (Facilities + Compras)", ok,
+             "Screenshots guardados en ./evidencias_sso_portales/")
+    except Exception as e:
+        _reg("Portales Internos (Facilities + Compras)", False, f"{type(e).__name__}: {e}")
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+#  PASO 6 — Humand SSO
 # ═════════════════════════════════════════════════════════════════════════════
 
 def paso_humand_sso():
-    _separador(3, 7, "Acceso SSO a Humand")
+    _separador(6, "Acceso SSO a Humand")
     print("\n  NOTA: Al finalizar, presioná Enter en la terminal para continuar.\n")
     try:
         from check_humandSSO import check_sso
@@ -130,57 +174,11 @@ def paso_humand_sso():
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-#  PASO 4 — 3CX Llamadas
-# ═════════════════════════════════════════════════════════════════════════════
-
-def paso_3cx():
-    _separador(4, 7, "Verificación de llamadas salientes (3CX Phone)")
-    try:
-        from check_Llamadas3cx import check_3cx
-        ok = check_3cx()
-        _reg("Telefonía IP — 3CX", ok, "Screenshot guardado en ./evidencias/")
-    except Exception as e:
-        _reg("Telefonía IP — 3CX", False, f"{type(e).__name__}: {e}")
-
-
-# ═════════════════════════════════════════════════════════════════════════════
-#  PASO 5 — Citrix RDP
-# ═════════════════════════════════════════════════════════════════════════════
-
-def paso_citrix_rdp():
-    _separador(5, 7, "Acceso Citrix / Remote Desktop Connection")
-    try:
-        from check_citrix import check_citrix_rdp
-        ok = check_citrix_rdp()
-        _reg("Citrix / Remote Desktop", ok, "Screenshots guardados en ./evidencias/")
-    except SystemExit as e:
-        _reg("Citrix / Remote Desktop", e.code == 0)
-    except Exception as e:
-        _reg("Citrix / Remote Desktop", False, f"{type(e).__name__}: {e}")
-
-
-# ═════════════════════════════════════════════════════════════════════════════
-#  PASO 6 — SAP Login
-# ═════════════════════════════════════════════════════════════════════════════
-
-def paso_sap():
-    _separador(6, 7, "Login SAP ECC Producción")
-    try:
-        from sap_login_check import check_sap_login
-        resultado = check_sap_login()
-        _reg("SAP ECC Producción", resultado == "OK")
-    except SystemExit as e:
-        _reg("SAP ECC Producción", e.code == 0, "Proceso terminó con sys.exit")
-    except Exception as e:
-        _reg("SAP ECC Producción", False, f"{type(e).__name__}: {e}")
-
-
-# ═════════════════════════════════════════════════════════════════════════════
 #  PASO 7 — Email Helpdesk
 # ═════════════════════════════════════════════════════════════════════════════
 
 def paso_email_helpdesk():
-    _separador(7, 7, "Envío de mail de prueba vía Outlook (ticket helpdesk)")
+    _separador(7, "Envío de mail de prueba vía Outlook (ticket helpdesk)")
     try:
         from enviar_mail_outlook import enviar
         enviar()
@@ -273,27 +271,6 @@ def _seccion_header(titulo: str, ok: bool) -> str:
     """
 
 
-def _html_sitios_web(items: list) -> str:
-    if not items:
-        return ""
-    html = '<tr><td colspan="2" style="padding:6px 0 0 0;"><table width="100%" cellpadding="0" cellspacing="0" border="0">'
-    for i in items:
-        ok_item = i.get("estado") == "OK"
-        lat     = f'<span style="color:#888;font-size:11px;"> ({i["latencia"]} ms)</span>' if i.get("latencia") else ""
-        badge   = _badge_ok() if ok_item else _badge_fallo()
-        det     = f'<br><span style="color:#C62828;font-size:11px;padding-left:16px;">↳ {i["detalle"]}</span>' if not ok_item and i.get("detalle") else ""
-        bg      = "#ffffff" if ok_item else "#fff5f5"
-        html += f"""
-        <tr style="background-color:{bg};">
-          <td style="padding:5px 8px;border-bottom:1px solid #f0f0f0;font-size:13px;">
-            <span style="color:#333;">{i['nombre']}</span>{lat}{det}
-          </td>
-          <td align="right" style="padding:5px 8px;border-bottom:1px solid #f0f0f0;white-space:nowrap;">{badge}</td>
-        </tr>"""
-    html += "</table></td></tr>"
-    return html
-
-
 def _html_certificados(items: list) -> str:
     if not items:
         return ""
@@ -384,9 +361,7 @@ def generar_html_email() -> str:
     detalle_secciones = ""
     for r in _resultados:
         detalle_secciones += _seccion_header(r["nombre"], r["ok"])
-        if r["nombre"] == "Sitios Web Corporativos" and r.get("items"):
-            detalle_secciones += _html_sitios_web(r["items"])
-        elif r["nombre"] == "Certificados SSL" and r.get("items"):
+        if r["nombre"] == "Certificados SSL" and r.get("items"):
             detalle_secciones += _html_certificados(r["items"])
         else:
             detalle_secciones += _html_paso_simple(r)
@@ -559,12 +534,12 @@ if __name__ == "__main__":
     print(f"║  Inicio: {inicio.strftime('%d/%m/%Y  %H:%M:%S')}{'':47}║")
     print("╚" + "═" * 70 + "╝")
 
-    paso_http_status()
     paso_certificados()
-    paso_humand_sso()
     paso_3cx()
     paso_citrix_rdp()
     paso_sap()
+    paso_sso_portales()
+    paso_humand_sso()
     paso_email_helpdesk()
 
     todo_ok = imprimir_resumen_consola()

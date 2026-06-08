@@ -91,10 +91,10 @@ TITULOS_VENTANA_EXCLUIR = [
 SEG_TRAS_ACTIVAR          = 1.0   # margen tras activar ventana
 SEG_ENTRE_DIGITOS         = 0.15  # delay entre cada dígito al tipear
 SEG_TRAS_TIPEAR           = 0.5   # margen antes de Enter
-SEG_MAX_LLAMADA           = 45    # máximo que esperamos que la llamada esté activa
+SEG_MAX_LLAMADA           = 10   # máximo que esperamos que la llamada esté activa
 SEG_MIN_SCREENSHOT        = 8     # mínimo antes de tomar screenshot (llamada en curso)
 SEG_ANTES_DE_COLGAR       = 3     # pausa visible entre screenshot y colgar
-SEG_ESPERAR_REGISTRO_PBX  = 20    # extra al lanzar 3CX desde cero: esperar registro PBX
+SEG_ESPERAR_REGISTRO_PBX  = 10    # extra al lanzar 3CX desde cero: esperar registro PBX
 
 # Carpeta de evidencias
 EVIDENCIA_DIR = Path(__file__).parent / "evidencias"

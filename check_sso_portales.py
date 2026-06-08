@@ -112,7 +112,7 @@ def _esperar_dashboard(pagina, portal, timeout_ms):
             titulo = (pagina.title() or "").lower()
             url    = pagina.url.lower()
 
-            if titulo_ok and titulo_ok in titulo:
+            if titulo_ok and titulo_ok in titulo and "/auth/" not in url:
                 return f"título: '{pagina.title()}'"
 
             if url_ok in url and "/auth/" not in url:
@@ -133,13 +133,23 @@ def _login_directo(pagina, nombre):
     """Login directo con usuario y password (Facilities)."""
     _log(nombre, "  Completando login directo (usuario + password)...")
     try:
-        # Campo usuario — busca input de texto visible
-        sel_user = "input[type='text'], input[name='username'], input[name='user'], input:not([type='password'])"
-        pagina.wait_for_selector(sel_user, timeout=6000)
-        pagina.locator(sel_user).first.fill(FACILITIES_USER)
+        # Esperar que el formulario esté listo
+        pagina.wait_for_selector("#login_username", timeout=8000)
 
-        # Campo password
-        pagina.locator("input[type='password']").first.fill(FACILITIES_PASS)
+        # Verificar si los campos ya tienen datos (autofill/cookie)
+        usuario_actual = pagina.locator("#login_username").input_value()
+        pass_actual    = pagina.locator("#login_password").input_value()
+
+        if usuario_actual and pass_actual:
+            _log(nombre, f"  Campos ya completados (usuario: {usuario_actual}) — directo a Ingresar.")
+        else:
+            # Completar los campos vacíos
+            if not usuario_actual:
+                pagina.locator("#login_username").fill(FACILITIES_USER)
+                _log(nombre, f"  Usuario completado: {FACILITIES_USER}")
+            if not pass_actual:
+                pagina.locator("#login_password").fill(FACILITIES_PASS)
+                _log(nombre, "  Password completado.")
 
         # Botón Ingresar
         for sel in ["button:has-text('Ingresar')", "input[type='submit']", "button[type='submit']"]:
@@ -152,7 +162,7 @@ def _login_directo(pagina, nombre):
             except Exception:
                 continue
 
-        pagina.wait_for_timeout(1500)
+        pagina.wait_for_timeout(2000)
 
     except Exception as e:
         _log(nombre, f"  ⚠ Error en login directo: {e}")
@@ -232,6 +242,7 @@ def verificar_portal(portal, timestamp, playwright):
         resultado = _esperar_dashboard(pagina, portal, 3000)
         if resultado:
             _log(nombre, f"  Sesión cacheada — ya en dashboard ({resultado})")
+            pagina.wait_for_timeout(3000)
             pagina.screenshot(path=str(path_ss), full_page=False)
             _log(nombre, f"✓ OK ({time.time()-t0:.1f}s) — {path_ss.name}")
             return True
@@ -273,7 +284,7 @@ def verificar_portal(portal, timestamp, playwright):
 
         # ── 4. Screenshot de evidencia ────────────────────────────────────────
         _log(nombre, f"  ({time.time()-t0:.1f}s) ✓ Dashboard OK — {resultado}")
-        pagina.wait_for_timeout(800)
+        pagina.wait_for_timeout(3000)   # pausa para que se vea el dashboard
         pagina.screenshot(path=str(path_ss), full_page=False)
         _log(nombre, f"✓ OK ({time.time()-t0:.1f}s) — Screenshot: {path_ss.name}")
         ok = True
