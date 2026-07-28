@@ -26,7 +26,7 @@ import psutil
 SAP_LOGON_PATH      = r"C:\Program Files (x86)\SAP\FrontEnd\SAPgui\saplogon.exe"
 SAP_CONNECTION_NAME = "ECC Producción"
 SAP_USER            = "SVILAR"
-SAP_PASSWORD        = "Sergio2026$"
+SAP_PASSWORD        = "Elsa2026$$"
 SAP_CLIENT          = "300"    # Mandante — ajustá si es distinto
 SAP_LANGUAGE        = "ES"
 # ─────────────────────────────────────────

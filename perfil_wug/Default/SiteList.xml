@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<site-list version="1">
+ <site url="https://sbc.pecomenergia.com.ar">
+  <compat-mode>Default</compat-mode>
+  <open-in allow-redirect="true">IE11</open-in>
+ </site>
+</site-list>

@@ -1,0 +1,903 @@
+{
+  "folders": [
+    {
+      "id": "custom",
+      "icon": "I_CustomContent.svg",
+      "name": "core.CUSTOM_CONTENT",
+      "reports": [
+        {
+          "icon": "I_FreeFormTextHTML.svg",
+          "viewClass": "Wug.report.freeformtext.FreeformtextReport",
+          "name": "core.HTML_REPORT",
+          "tags": "core.CUSTOM_CONTENT"
+        },
+        {
+          "icon": "I_CustomLinks.svg",
+          "name": "core.CUSTOM_LINKS",
+          "tags": "core.CUSTOM_CONTENT",
+          "viewClass": "Wug.report.customlinks.CustomLinksReport"
+        }
+      ]
+    },
+    {
+      "id": "devices",
+      "icon": "I_GenericDevice.svg",
+      "name": "core.DEVICES",
+      "reports": [
+        {
+          "icon": "I_DeviceInfoStatus.svg",
+          "name": "wug.DEVICE_INFORMATION_AND_STATUS",
+          "reportType": "device",
+          "viewClass": "Wug.report.deviceinformationandstatus.DeviceInformationAndStatusReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_DeviceActiveMonitor.svg",
+          "name": "wug.DEVICE_ACTIVE_MONITOR_STATES",
+          "reportType": "device",
+          "viewClass": "Wug.report.deviceactivemonitorstates.DeviceActiveMonitorStatesReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_ActiveMonitorAvailability.svg",
+          "name": "wug.ACTIVE_MONITORS_AVAILABILITY",
+          "reportType": "device",
+          "viewClass": "Wug.report.deviceactivemonitoravailability.DeviceActiveMonitorAvailabilityReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_Attributes.svg",
+          "name": "wug.ATTRIBUTES",
+          "viewClass": "Wug.view.device.attributes.AttributesPanel",
+          "reportType": "device",
+          "tags": "core.DEVICE core.DEVICES wug.ATTRIBUTE"
+        },
+        {
+          "icon": "I_MaintenanceReport.svg",
+          "name": "wug.DEVICE_IN_MAINTENANCE",
+          "reportType": "device",
+          "viewClass": "Wug.report.devicemaintenancemode.DeviceMaintenanceModeReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_DeviceGroupMiniStatus.svg",
+          "name": "wug.DEVICE_GROUP_MINI_STATUS",
+          "viewClass": "Wug.report.devicegroup.DeviceGroupReport",
+          "reportType": "device",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_DeviceCustomLinks.svg",
+          "name": "wug.DEVICE_CUSTOM_LINKS",
+          "reportType": "device",
+          "viewClass": "Wug.report.devicecustomlinks.DeviceCustomLinksReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_SNMPDetails-24.svg",
+          "name": "wug.DEVICE_SNMP_DETAILS",
+          "viewClass": "Wug.report.devicesnmpdetails.DeviceSnmpDetailsReport",
+          "reportType": "device",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_Dependencies.svg",
+          "name": "wug.DEPENDENCIES",
+          "reportType": "device",
+          "viewClass": "Wug.report.devicedependencies.DeviceDependenciesReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_EnabledActiveMonitorStates-24.svg",
+          "name": "wug.ENABLED_ACTIVE_MONITOR_STATES",
+          "reportType": "device",
+          "tags": "core.DEVICE core.DEVICES",
+          "viewClass": "Wug.report.enabledactivemonitorstates.EnabledActiveMonitorStatesReport"
+        },
+        {
+          "icon": "I_InterfaceDetails.svg",
+          "name": "core.INTERFACE_DETAILS",
+          "reportType": "device",
+          "tags": "core.DEVICE core.DEVICES",
+          "viewClass": "Wug.report.interfaceDetails.InterfaceDetailsReport"
+        },
+        {
+          "icon": "I_MapView.svg",
+          "name": "wug.MAP_VIEW",
+          "viewClass": "Wug.report.mapview.MapView",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_MonitorsApplied.svg",
+          "name": "core.MONITORS_APPLIED",
+          "reportType": "device",
+          "viewClass": "Wug.report.monitorsapplied.MonitorsAppliedGroupReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_Notes.svg",
+          "name": "core.NOTES",
+          "reportType": "device",
+          "viewClass": "Wug.report.devicenotes.DeviceNotesReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_PerformanceMonitorSummary.svg",
+          "name": "wug.PERFORMANCE_MONITOR_SUMMARY",
+          "reportType": "device",
+          "viewClass": "Wug.report.perfmonitorsummary.PerfMonitorSummaryReport",
+          "tags": "core.DEVICE core.DEVICES"
+        },
+        {
+          "icon": "I_CurrentDeviceStates-24.svg",
+          "name": "wug.CURRENT_DEVICE_STATES",
+          "viewClass": "Wug.report.deviceStates.DeviceStatesReport",
+          "tags": "core.DEVICE wug.STATE"
+        },
+        {
+          "icon": "I_ActionLog.svg",
+          "name": "wug.WUG_LIVE_TITLE",
+          "viewClass": "Wug.report.wuglive.WugLiveReport",
+          "tags": "core.DEVICE wug.STATE"
+        }
+      ]
+    },
+    {
+      "id": "distributed",
+      "icon": "I_Distributed.svg",
+      "name": "wug.DISTRIBUTED",
+      "licenses": [
+        "WUGDstServerEnabled",
+        "WUGDstClientEnabled"
+      ],
+      "reports": [
+        {
+          "icon": "I_RemoteSiteOverview.svg",
+          "name": "wug.REMOTE_SITE_OVERVIEW",
+          "reportType": "distributed",
+          "viewClass": "Wug.report.distributed.remotesiteoverview.RemoteSiteOverviewReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_RemoteSiteLicensingUsage.svg",
+          "name": "wug.REMOTE_SITE_LICENSING_USAGE",
+          "reportType": "distributed",
+          "viewClass": "Wug.report.distributed.licensingusage.LicensingUsageReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_ActiveMonitorStatesRemote.svg",
+          "name": "wug.ACTIVE_MONITOR_STATES_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.activemonitorstates.ActiveMonitorStatesReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_ActionLog.svg",
+          "name": "wug.ACTION_ACTIVITY_LOG_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.actionactivitylog.ActionActivityLogReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_CustomPerformanceMonitor.svg",
+          "name": "wug.CUSTOM_PERFORMANCE_MONITOR_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.customperfmonitor.CustomPerfMonitorReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_GroupStatus.svg",
+          "name": "wug.GROUP_LIST_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.grouplist.GroupListReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_RemoteSitesStatus.svg",
+          "name": "wug.REMOTE_SITES_STATUS",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.remotesitesstatus.RemoteSitesStatusReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_RemoteSiteList.svg",
+          "name": "wug.REMOTE_SITE_LIST",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.remotesitelist.RemoteSiteListReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_RemoteSiteLog.svg",
+          "name": "wug.REMOTE_SITE_ERROR_LOG",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.remotesitelog.RemoteSiteLogReport",
+          "licenses": [
+            "WUGDstServerEnabled",
+            "WUGDstClientEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_CPUUtilization.svg",
+          "name": "wug.CPU_UTILIZATION_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.cpuutilization.CpuUtilizationReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_DiskUtilization.svg",
+          "name": "wug.DISK_UTILIZATION_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.diskutilization.DiskUtilizationReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_DiskFreeSpace.svg",
+          "name": "wug.DISK_FREE_SPACE_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.diskfreespace.DiskFreeSpaceReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_InterfaceUtilization.svg",
+          "name": "wug.INTERFACE_UTILIZATION_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.interfaceutilization.InterfaceUtilizationReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_MemoryUtilization.svg",
+          "name": "wug.MEMORY_UTILIZATION_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.memoryutilization.MemoryUtilizationReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_InterfaceTraffic.svg",
+          "name": "wug.INTERFACE_TRAFFIC_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.interfacetraffic.InterfaceTrafficReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_PingAvailability.svg",
+          "name": "wug.PING_AVAILABILITY_AND_PACKET_LOSS_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.pingavailability.PingAvailabilityReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_PingResponseTime.svg",
+          "name": "wug.PING_RESPONSE_TIME_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.pingresponsetime.PingResponseTimeReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        },
+        {
+          "icon": "I_SummaryCounts.svg",
+          "name": "wug.SUMMARY_COUNTS_REMOTE",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.distributed.summarycounts.SummaryCountsReport",
+          "licenses": [
+            "WUGDstServerEnabled"
+          ],
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewRemoteReports"
+          ],
+          "tags": "wug.DISTRIBUTED"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "icon": "I_FlowmonIcon.svg",
+      "name": "wug.NTAPLUS_NETWORK_TRAFFIC",
+      "reports": [
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_EVENT_METHOD_TITLE",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.eventmethod.FlowmonEventMethodReport",
+          "tags": "wug.KEMP"
+        },
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_EVENT_SEVERITY",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.eventseverity.FlowmonEventSeverityReport",
+          "tags": "wug.KEMP"
+        },
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_FLOWS_TITLE",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.FlowmonFlowReport",
+          "tags": "wug.KEMP"
+        },
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_PACKETS_TITLE",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.FlowmonPacketReport",
+          "tags": "wug.KEMP"
+        },
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_RESPONSE_TIME_TITLE",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.FlowmonResponseTimeReport",
+          "tags": "wug.KEMP"
+        },
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_RETRANSMISSIONS_TITLE",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.FlowmonRetransmissionReport",
+          "tags": "wug.KEMP"
+        },
+        {
+          "icon": "I_FlowmonIcon.svg",
+          "name": "wug.NTAPLUS_REPORT_TRAFFIC_TITLE",
+          "reportType": [
+            "device",
+            "flowmon"
+          ],
+          "viewClass": "Wug.report.flowmon.FlowmonTrafficReport",
+          "tags": "wug.KEMP"
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "icon": "I_Performance.svg",
+      "name": "wug.PERFORMANCE_MONITORING",
+      "reports": [
+        {
+          "icon": "I_RealTimePerformanceMonitor.svg",
+          "name": "wug.RPM_TITLE",
+          "reportType": [
+            "device"
+          ],
+          "viewClass": "Wug.report.realtimeperformancemonitor.Rpm",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_CPUUtilization.svg",
+          "name": "wug.CPU_UTILIZATION",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.perfmon.Cpu",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_CustomPerformanceMonitor.svg",
+          "name": "wug.CUSTOM_PERFORMANCE_MONITOR",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.customperfmonitor.CustomPerfMonitorReport",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_DeviceUtilizationSummary-24.svg",
+          "name": "wug.DEVICE_UTILIZATION_SUMMARY",
+          "reportType": [
+            "device"
+          ],
+          "viewClass": "Wug.report.deviceutilizationsummary.DeviceUtilizationSummaryReport",
+          "tags": "wug.UTILIZATION"
+        },
+        {
+          "icon": "I_DiskUtilization.svg",
+          "name": "wug.DISK_UTILIZATION",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.perfmon.Disk",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_DiskFreeSpace.svg",
+          "name": "wug.DISK_FREE_SPACE",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.diskfreespace.DiskFreeSpaceReport",
+          "tags": "core.DEVICE wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_InterfaceDiscards.svg",
+          "name": "wug.INTERFACE_DISCARDS",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.interfacediscards.InterfaceDiscardsReport",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_InterfaceErrors.svg",
+          "name": "wug.INTERFACE_ERRORS",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.interfaceerrors.InterfaceErrorsReport",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_InterfaceTraffic.svg",
+          "name": "wug.INTERFACE_TRAFFIC",
+          "viewClass": "Wug.report.interfacetraffic.InterfaceTrafficReport",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_InterfaceUtilization.svg",
+          "name": "wug.INTERFACE_UTILIZATION",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.perfmon.Interface",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_MemoryUtilization.svg",
+          "name": "wug.MEMORY_UTILIZATION",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.memoryutilization.MemoryUtilizationReport",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_PingAvailability.svg",
+          "name": "wug.PING_AVAILABILITY_PACKET_LOSS",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.perfmon.PingAvailability",
+          "tags": "wug.TOPX_THRESHOLD"
+        },
+        {
+          "icon": "I_PingResponseTime.svg",
+          "name": "wug.PING_RESPONSE_TIME",
+          "viewClass": "Wug.report.pingresponsetime.PingResponseTimeReport",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "tags": "wug.TOPX_THRESHOLD"
+        }
+      ]
+    },
+    {
+      "id": "sysInfo",
+      "icon": "I_Info.svg",
+      "name": "core.SYSTEM_INFO",
+      "folders": [
+        {
+          "id": "inventory",
+          "icon": "I_Inventory.svg",
+          "name": "core.INVENTORY",
+          "reports": [
+            {
+              "icon": "I_SumActions.svg",
+              "name": "wug.ACTIONS_BY_TYPE",
+              "viewClass": "Wug.report.totalactionsappliedbytype.TotalActionsAppliedByTypeReport",
+              "tags": "core.INVENTORY core.SYSTEM_INFO"
+            },
+            {
+              "icon": "I_SumMonitors.svg",
+              "name": "wug.ACTIVE_MONITORS_BY_TYPE",
+              "viewClass": "Wug.report.totalactivemonitorsbytype.TotalActiveMonitorsByTypeReport",
+              "thumb": "Reports/Workspace/PreviewImages/SYSTEM-TotalActiveMonitorsByType.jpg",
+              "tags": "core.INVENTORY core.SYSTEM_INFO"
+            },
+            {
+              "icon": "I_SumMonitors.svg",
+              "name": "wug.TOTAL_PERFORMANCE_MONITORS_BY_TYPE",
+              "viewClass": "Wug.report.totalperformancemonitorsbytype.TotalPerformanceMonitorsByTypeReport",
+              "reportType": [
+                "device",
+                "deviceGroup"
+              ],
+              "tags": "core.MONITORS core.PERFORMANCE"
+            },
+            {
+              "icon": "I_SumMonitors.svg",
+              "name": "wug.PASSIVE_MONITORS_BY_TYPE",
+              "viewClass": "Wug.report.passivemonitorsbytype.PassiveMonitorsByTypeReport",
+              "thumb": "Reports/Workspace/PreviewImages/SYSTEM-TotalPassiveMonitorsByType.jpg",
+              "tags": "core.INVENTORY core.SYSTEM_INFO"
+            },
+            {
+              "icon": "I_ElementCount.svg",
+              "name": "core.ELEMENT_COUNT",
+              "viewClass": "Wug.report.elementcount.ElementCountReport",
+              "tags": "core.INVENTORY core.SYSTEM_INFO"
+            },
+            {
+              "icon": "I_DevicesByRole.svg",
+              "name": "wug.TOTAL_DEVICES_BY_ROLE",
+              "viewClass": "Wug.report.totaldevicesbyrole.TotalDevicesByRoleReport",
+              "tags": "core.DEVICE core.TYPE"
+            }
+          ]
+        }
+      ],
+      "reports": [
+        {
+          "icon": "I_WhatsUpDatabaseSize.svg",
+          "name": "wug.DATABASE_SIZE",
+          "viewClass": "Wug.report.databasesize.DatabaseSizeReport",
+          "thumb": "Reports/Workspace/PreviewImages/SYSTEM-DatabaseSize.jpg",
+          "tags": "core.SYSTEM_INFO"
+        },
+        {
+          "icon": "I_DatabaseTableUsage.svg",
+          "name": "wug.DATABASE_USAGE",
+          "viewClass": "Wug.report.databasetableusage.DatabaseTableUsageReport",
+          "thumb": "Reports/Workspace/PreviewImages/SYSTEM-TableUsage.jpg",
+          "tags": "core.SYSTEM_INFO"
+        },
+        {
+          "icon": "I_NetworkCoverageReport-24.svg",
+          "name": "wug.NETWORK_COVERAGE",
+          "tags": "core.CUSTOM_CONTENT",
+          "viewClass": "Wug.report.networkcoverage.NetworkCoverageReport"
+        },
+        {
+          "icon": "I_PollerHealth.svg",
+          "name": "wug.POLLER_HEALTH",
+          "viewClass": "Wug.report.pollerhealth.PollerHealthReport",
+          "tags": "wug.POLLER_HEALTH"
+        },
+        {
+          "icon": "I_DeviceThresholds.svg",
+          "name": "wug.DEVICE_THRESHOLDS",
+          "viewClass": "Wug.report.devicethresholds.DeviceThresholdsReport",
+          "tags": "wug.DEVICE_THRESHOLDS"
+        },
+        {
+          "icon": "I_ThresholdSummary.svg",
+          "name": "wug.THRESHOLD_SUMMARY",
+          "viewClass": "Wug.report.thresholdsummary.ThresholdSummaryReport",
+          "tags": "core.THRESHOLD core.ALERT"
+        },
+        {
+          "icon": "I_NetworkComposition-24.svg",
+          "name": "wug.NETWORK_COMPOSITION",
+          "viewClass": "Wug.report.networkcomposition.NetworkCompositionReport",
+          "tags": "core.SYSTEM_INFO"
+        }
+      ]
+    },
+    {
+      "id": "users",
+      "icon": "I_UserGroup.svg",
+      "name": "core.USERS",
+      "reports": [
+        {
+          "icon": "I_User.svg",
+          "name": "wug.DEVICE_GROUP_ACCESS_RIGHTS_USER_DETAILS_REPORT_TITLE",
+          "viewClass": "Wug.report.dgardetails.DgarDetailsReport",
+          "tags": "core.USERS wug.USER_PERMISSIONS"
+        },
+        {
+          "icon": "I_GenericDevice.svg",
+          "name": "wug.DEVICE_GROUP_ACCESS_RIGHTS_DEVICE_DETAILS_REPORT_TITLE",
+          "viewClass": "Wug.report.dgardetalsbydevice.DgarDetailsByDeviceReport",
+          "tags": "core.USERS wug.USER_PERMISSIONS"
+        },
+        {
+          "icon": "I_StaticGroup.svg",
+          "name": "wug.DEVICE_GROUP_ACCESS_RIGHTS_DEVICE_GROUP_DETAILS_REPORT_TITLE",
+          "viewClass": "Wug.report.dgardetailsbydevicegroup.DgarDetailsByDeviceGroupReport",
+          "tags": "core.USERS wug.USER_PERMISSIONS"
+        }
+      ]
+    },
+    {
+      "id": "trouble",
+      "icon": "I_Troubleshooting.svg",
+      "name": "wug.TROUBLESHOOTING",
+      "folders": [
+        {
+          "id": "logs",
+          "icon": "I_Logs.svg",
+          "name": "wug.LOGS",
+          "reports": [
+            {
+              "icon": "I_GeneralErrorLog.svg",
+              "name": "wug.GENERAL_ERROR_LOG",
+              "viewClass": "Wug.log.generalerror.GeneralError",
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            },
+            {
+              "icon": "I_PassiveMonitorErrorLog.svg",
+              "name": "wug.PASSIVE_MONITOR_ERROR_LOG",
+              "viewClass": "Wug.log.passivemonitorerror.PassiveMonitorError",
+              "reportType": [
+                "device",
+                "deviceGroup"
+              ],
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            },
+            {
+              "icon": "I_SNMPTrapLog.svg",
+              "name": "wug.SNMP_TRAP_LOG",
+              "viewClass": "Wug.log.snmptrap.SnmpTrap",
+              "reportType": [
+                "device",
+                "deviceGroup"
+              ],
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            },
+            {
+              "icon": "I_SysLog.svg",
+              "name": "wug.SYSLOG",
+              "viewClass": "Wug.log.syslog.Syslog",
+              "reportType": [
+                "device",
+                "deviceGroup"
+              ],
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            },
+            {
+              "icon": "I_WebAlarmLog.svg",
+              "name": "wug.WEB_ALARMS",
+              "viewClass": "Wug.report.webalarms.WebAlarmsReport",
+              "reportType": [
+                "device",
+                "deviceGroup"
+              ],
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            },
+            {
+              "icon": "I_WebUserActivityLog.svg",
+              "name": "wug.WEB_USER_ACTIVITY_LOG",
+              "viewClass": "Wug.log.webuseractivity.WebUserActivity",
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            },
+            {
+              "icon": "I_WindowsEventLog.svg",
+              "name": "wug.WINDOWS_EVENT_LOG",
+              "viewClass": "Wug.log.windowsevent.WindowsEvent",
+              "reportType": [
+                "device",
+                "deviceGroup"
+              ],
+              "tags": "wug.TROUBLESHOOTING wug.LOGS"
+            }
+          ]
+        }
+      ],
+      "reports": [
+        {
+          "icon": "I_ActionsFired.svg",
+          "name": "wug.ACTIONS_FIRED",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.actionsfired.ActionsFiredReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_DownDevices.svg",
+          "name": "wug.DOWN_DEVICES",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.downdevices.DownDeviceReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_DownActiveMonitors.svg",
+          "name": "wug.DOWN_ACTIVE_MONITORS",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.downactivemonitors.DownActiveMonitorsReport",
+          "tags": "wug.TROUBLESHOOTING wug.DOWN wug.ACTIVE_MONITORS"
+        },
+        {
+          "icon": "I_DownDevices.svg",
+          "name": "wug.DOWN_CRITICAL_MONITORS",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.deviceswithdowncriticalmonitors.DeviceWithDownCiticalMonitorsReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_DownInterfaces.svg",
+          "name": "wug.DOWN_INTERFACES",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.alldowninterfaces.AllDownInterfacesReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_GroupStatus.svg",
+          "name": "wug.GROUP_STATUS",
+          "tags": "wug.TROUBLESHOOTING",
+          "viewClass": "Wug.report.groupstatus.GroupStatusReport"
+        },
+        {
+          "icon": "I_StateChangeTimeline.svg",
+          "name": "wug.STATE_CHANGE_TIMELINE",
+          "reportType": "device",
+          "viewClass": "Wug.report.statechangetimeline.StateChangeTimelineReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_StateChangeTimeline.svg",
+          "name": "wug.DEVICE_STATE_CHANGE_TIMELINE",
+          "reportType": "device",
+          "viewClass": "Wug.report.devicestatechangetimeline.DeviceStateChangeTimelineReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_SummaryCounts.svg",
+          "name": "wug.SUMMARY_COUNTS",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.summarycount.SummaryCountReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_ActionLog.svg",
+          "name": "wug.ACTION_ACTIVITY_LOG",
+          "reportType": [
+            "device",
+            "deviceGroup"
+          ],
+          "viewClass": "Wug.report.actionactivitylogtail.ActionActivityLogTailReport",
+          "tags": "wug.TROUBLESHOOTING"
+        },
+        {
+          "icon": "I_StateChangeAcknowledgement.svg",
+          "name": "wug.STATE_CHANGE_ACK",
+          "reportType": "deviceGroup",
+          "viewClass": "Wug.report.statechangeacknowledgment.StateChangeAcknowledgmentReport",
+          "tags": "wug.TROUBLESHOOTING"
+        }
+      ]
+    }
+  ]
+}

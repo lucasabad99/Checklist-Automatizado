@@ -1,0 +1,799 @@
+{
+  "dashboards": [
+    {
+      "icon": "images/I_Home.svg",
+      "name": "wug.HOME_DASHBOARD_NAME",
+      "viewClass": "Wug.view.dashboard.Home",
+      "dashboardId": 4,
+      "testId": "homeDashboard"
+    },
+    {
+      "icon": "images/I_OverviewDashboard-24.svg",
+      "name": "wug.OVERVIEW_VIEW_NAME",
+      "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+      "viewClass": "Wug.view.overview.Overview",
+      "testId": "overview"
+    },
+    {
+      "icon": "images/I_DeviceStatus.svg",
+      "name": "wug.DEVICE_STATUS_NAME",
+      "viewClass": "Wug.view.dashboard.DeviceStatus",
+      "dashboardId": 1,
+      "testId": "deviceStatusDashboard"
+    },
+    {
+      "icon": "images/I_AlertCenter.svg",
+      "name": "wug.ALERT_CENTER_NAME",
+      "roles": [
+        "WhatsUpPlatform_AlertCenter_ViewReports",
+        "WhatsUpGold_ActionCenterItemsReport_ViewReport",
+        "WhatsUpGold_AlertCenter_ViewReports"
+      ],
+      "viewClass": "Wug.view.dashboard.alertcenter.AlertCenter",
+      "testId": "alertCenter"
+    },
+    {
+      "icon": "images/I_UserGroup.svg",
+      "name": "wug.USER_PERMISSIONS",
+      "roles": [
+        "WhatsUpPlatform_UserManagement_ViewUserManagementGroup",
+        "WhatsUpPlatform_UserManagement_ViewUserManagementUser",
+        "WhatsUpPlatform_DeviceGroups_ViewDeviceGroups"
+      ],
+      "viewClass": "Wug.view.userPermissions.UserPermissions",
+      "dashboardId": 100,
+      "testId": "userPermissions"
+    },
+    {
+      "icon": "images/I_ActivityLog.svg",
+      "name": "wug.WUG_LIVE_TITLE",
+      "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "liveActivityLog",
+      "params": {
+        "reportClass": "Wug.report.wuglivefeed.WugLiveFeedReport",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_NOCViewer.svg",
+      "name": "wug.NOC_VIEWER_TITLE",
+      "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+      "viewClass": "Wug.view.nocviewer.NocViewer",
+      "testId": "nocViewerMenuItem",
+      "params": {
+        "isMainView": true
+      }
+    }
+  ],
+  "performance": [
+    {
+      "icon": "images/I_Top10.svg",
+      "name": "wug.TOP_10_VIEW_NAME",
+      "roles": "WhatsUpPlatform_Reports_ViewDeviceCpuUtilizationReports",
+      "viewClass": "Wug.view.top10.Top10",
+      "testId": "top10View"
+    },
+    {
+      "icon": "images/I_CPUUtilization.svg",
+      "name": "wug.CPU_UTILIZATION",
+      "roles": "WhatsUpPlatform_Reports_ViewDeviceCpuUtilizationReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "CPU_Util_View",
+      "params": {
+        "reportClass": "Wug.report.perfmon.Cpu",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_DiskUtilization.svg",
+      "name": "wug.DISK_UTILIZATION",
+      "roles": "WhatsUpPlatform_Reports_ViewDeviceDiskUtilizationReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Disk_Util_View",
+      "params": {
+        "reportClass": "Wug.report.perfmon.Disk",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_MemoryUtilization.svg",
+      "name": "wug.MEMORY_UTILIZATION",
+      "roles": "WhatsUpGold_MemoryUtilization_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Mem_Util_View",
+      "params": {
+        "reportClass": "Wug.report.memoryutilization.MemoryUtilizationReport",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_CustomMonitors.svg",
+      "name": "wug.CUSTOM_MONITORS",
+      "roles": "WhatsUpPlatform_Reports_ViewDeviceMultipleNumericStatReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Custom_Monitors_View",
+      "params": {
+        "reportClass": "Wug.report.customperfmonitor.CustomPerfMonitorReport",
+        "isMainView": true
+      }
+    }
+  ],
+  "network": [
+    {
+      "icon": "images/I_InterfaceUtilization.svg",
+      "name": "wug.INTERFACE_UTILIZATION",
+      "roles": "WhatsUpGold_InterfaceUtilization_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Interface_Util_View",
+      "params": {
+        "reportClass": "Wug.report.perfmon.Interface",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_PingAvailability.svg",
+      "name": "wug.PING_AVAILABILITY",
+      "roles": "WhatsUpGold_Ping_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Ping_Avail_View",
+      "params": {
+        "reportClass": "Wug.report.perfmon.PingAvailability",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_PingResponseTime.svg",
+      "name": "wug.PING_RESPONSE_TIME",
+      "roles": "WhatsUpGold_Ping_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Ping_Response_Time_View",
+      "params": {
+        "reportClass": "Wug.report.pingresponsetime.PingResponseTimeReport",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_InterfaceError.svg",
+      "name": "wug.INTERFACE_ERRORS",
+      "roles": "WhatsUpGold_InterfaceDiscardsAndErrors_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Interface_Error_View",
+      "params": {
+        "reportClass": "Wug.report.interfaceerrors.InterfaceErrorsReport",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_InterfaceDiscard.svg",
+      "name": "wug.INTERFACE_DISCARDS",
+      "roles": "WhatsUpGold_InterfaceDiscardsAndErrors_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Interface_Discard_View",
+      "params": {
+        "reportClass": "Wug.report.interfacediscards.InterfaceDiscardsReport",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_InterfaceTraffic.svg",
+      "name": "wug.INTERFACE_TRAFFIC",
+      "roles": "WhatsUpGold_InterfaceDiscardsAndErrors_ViewReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Interface_Traffic_View",
+      "params": {
+        "reportClass": "Wug.report.interfacetraffic.InterfaceTrafficReport",
+        "isMainView": true
+      }
+    }
+  ],
+  "logs": [
+    {
+      "icon": "images/I_ActivityLog.svg",
+      "name": "wug.WUG_LIVE_ALL_LOGS_REPORT",
+      "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Consolidated_Log_View",
+      "params": {
+        "reportClass": "Wug.report.wuglive.ConsolidatedLogsReport",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ActionLog.svg",
+      "name": "core.ACTION_LOG",
+      "roles": "WhatsUpGold_ActionLog_ViewReport",
+      "viewClass": "Wug.log.action.Action",
+      "testId": "Action_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ActivityLog.svg",
+      "name": "core.ACTIVITY_LOG",
+      "roles": "WhatsUpGold_ActivityLog_ViewReport",
+      "viewClass": "Wug.log.activity.Activity",
+      "testId": "Other_Activity_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_AlertCenterLog.svg",
+      "name": "core.ALERT_CENTER_LOG",
+      "roles": "WhatsUpPlatform_AlertCenter_ViewReports",
+      "viewClass": "Wug.log.alertcenterlog.AlertCenterLog",
+      "testId": "Alert_Center_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_BlackoutSummary.svg",
+      "name": "core.BLACKOUT_SUMMARY_LOG",
+      "roles": [
+        "WhatsUpPlatform_Devices_ManageDevices",
+        "WhatsUpGold_Apm_ViewStatus"
+      ],
+      "viewClass": "Wug.log.blackoutsummary.BlackoutSummary",
+      "testId": "Blackout_Summary_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_DiscoveryScanLog.svg",
+      "name": "core.SCAN_HISTORY",
+      "roles": "WhatsUpPlatform_Discovery_View",
+      "viewClass": "Wug.view.discoveryScanHistory.DiscoveryScanHistory",
+      "testId": "Discovery_Scan_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ErrorGeneralLog.svg",
+      "name": "core.GENERAL_ERROR_LOG",
+      "roles": "WhatsUpGold_GeneralErrorLog_ViewReport",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Error_General_Log_View",
+      "params": {
+        "reportClass": "Wug.log.generalerror.GeneralError",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ErrorLoggerLog.svg",
+      "name": "wug.LOGGER_HEALTH_MESSAGE",
+      "roles": "WhatsUpGold_LoggerLog_ViewReport",
+      "viewClass": "Wug.log.loggererror.LoggerError",
+      "testId": "Logger_Health_Messages_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ErrorPassiveLog.svg",
+      "name": "core.PASSIVE_MONITOR_ERROR_LOG",
+      "roles": "WhatsUpGold_PassiveMonitor_ViewReport",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Error_Passive_Log_View",
+      "params": {
+        "reportClass": "Wug.log.passivemonitorerror.PassiveMonitorError",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ErrorPerformanceLog.svg",
+      "name": "core.PERFORMANCE_MONITOR_ERROR_LOG",
+      "roles": "WhatsUpGold_PerformanceMonitor_ViewReport",
+      "viewClass": "Wug.log.performancemonitorerror.PerformanceMonitorError",
+      "testId": "Perf_Mon_Error_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_RecurringActionLog.svg",
+      "name": "core.RECURRING_ACTION_LOG",
+      "roles": "WhatsUpGold_RecurringActionLog_ViewReport",
+      "viewClass": "Wug.log.recurringaction.RecurringAction",
+      "testId": "Recurring_Action_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_ScheduledReportLog.svg",
+      "name": "core.SCHEDULED_REPORT_LOG",
+      "roles": "WhatsUpGold_Scheduled_ViewReport",
+      "viewClass": "Wug.log.scheduledreport.ScheduledReport",
+      "testId": "Scheduled_Report_Log_View",
+      "params": {
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_SNMPTrapLog.svg",
+      "name": "core.SNMP_TRAP_LOG_2",
+      "roles": "WhatsUpGold_SnmpTrap_ViewReport",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "SnmpTrapLogs",
+      "params": {
+        "reportClass": "Wug.log.snmptrap.SnmpTrap",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_SysLog.svg",
+      "name": "core.SYSLOG",
+      "roles": "WhatsUpGold_Syslog_ViewReport",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "SyslogLogs",
+      "params": {
+        "reportClass": "Wug.log.syslog.Syslog",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_WebUserActivityLog.svg",
+      "name": "core.WEB_USER_ACTIVITY",
+      "roles": "WhatsUpGold_WebUserActivityLog_ViewReport",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "Web_User_Activity_Log_View",
+      "params": {
+        "reportClass": "Wug.log.webuseractivity.WebUserActivity",
+        "isMainView": true
+      }
+    },
+    {
+      "icon": "images/I_WindowsEventLog.svg",
+      "name": "core.WINDOWS_EVENT_LOG",
+      "roles": "WhatsUpGold_WindowsEventLog_ViewReport",
+      "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+      "testId": "WindowsEventLogs",
+      "params": {
+        "reportClass": "Wug.log.windowsevent.WindowsEvent",
+        "isMainView": true
+      }
+    }
+  ],
+  "others": [
+    {
+      "name": "wug.DEVICE",
+      "order": 3,
+      "testId": "device",
+      "items": [
+        {
+          "icon": "images/I_ActiveMonitorAvailability.svg",
+          "name": "wug.ACTIVE_MONITOR_AVAILABILITY",
+          "roles": "WhatsUpGold_ActiveMonitorAvailability_ViewGroupList",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Active_Monitor_Availability_View",
+          "params": {
+            "reportClass": "Wug.report.deviceactivemonitoravailability.DeviceActiveMonitorAvailabilityReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_ActiveMonitorOutages.svg",
+          "name": "wug.ACTIVE_MONITOR_OUTAGES",
+          "roles": "WhatsUpGold_ActiveMonitorOutages_ViewGroupOnly",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Active_Monitor_Outages_View",
+          "params": {
+            "reportClass": "Wug.report.activemonitoroutages.ActiveMonitorOutagesReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_AlertCenterItems.svg",
+          "name": "wug.ALERT_CENTER_ITEMS",
+          "viewClass": "Wug.log.alertcenteritemsreport.AlertCenterItemsReport",
+          "testId": "Alert_Center_Item_View",
+          "params": {
+            "isMainView": true
+          },
+          "roles": "WhatsUpPlatform_AlertCenter_ViewReports"
+        },
+        {
+          "icon": "images/I_QuarterlyAvailability.svg",
+          "name": "core.AVAILABILITY_SUMMARY",
+          "roles": "WhatsUpGold_StateChangeTimeLine_ViewGroupAndSingle",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Availability_View",
+          "params": {
+            "reportClass": "Wug.report.quarterlyavailabilitysummary.QuarterlyAvailabilitySummaryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_Credentials_Icon.svg",
+          "name": "wug.CREDENTIALS",
+          "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Credential_Report_Page_View",
+          "params": {
+            "reportClass": "Wug.report.credential.CredentialGroupReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_MaintenanceReport.svg",
+          "name": "wug.DEVICE_IN_MAINTENANCE",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+          "testId": "Maintenance_Report_View",
+          "params": {
+            "reportClass": "Wug.report.devicemaintenancemode.DeviceMaintenanceModeReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_DeviceHealth.svg",
+          "name": "wug.DEVICE_HEALTH",
+          "roles": "WhatsUpGold_Inventory_ViewDeviceHealth",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Device_Health_View",
+          "params": {
+            "reportClass": "Wug.report.devicehealth.DeviceHealthReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_DeviceUptime.svg",
+          "name": "wug.DEVICE_UPTIME",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "roles": "WhatsUpGold_Inventory_ViewDeviceUptime",
+          "testId": "Device_Uptime_View",
+          "params": {
+            "reportClass": "Wug.report.deviceuptime.DeviceUpTimeReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_DeviceUtilizationSummary-24.svg",
+          "name": "wug.DEVICE_UTILIZATION_SUMMARY",
+          "roles": [
+            "WhatsUpPlatform_Reports_ViewDeviceCpuUtilizationReports",
+            "WhatsUpPlatform_Reports_ViewDeviceDiskUtilizationReports",
+            "WhatsUpPlatform_Reports_ViewDeviceMemoryUtilizationReports",
+            "WhatsUpPlatform_Reports_ViewDeviceInterfaceUtilizationReports"
+          ],
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Device_Util_Summary_View",
+          "params": {
+            "reportClass": "Wug.report.deviceutilizationsummary.DeviceUtilizationSummaryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_DownActiveMonitors.svg",
+          "name": "wug.DOWN_ACTIVE_MONITORS",
+          "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Down_Active_Monitors_View",
+          "params": {
+            "reportClass": "Wug.report.downactivemonitors.DownActiveMonitorsReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_DownInterfaces.svg",
+          "name": "wug.DOWN_INTERFACES",
+          "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Down_Interfaces_View",
+          "params": {
+            "reportClass": "Wug.report.alldowninterfaces.AllDownInterfacesReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_MonitorsApplied.svg",
+          "name": "core.MONITORS_APPLIED",
+          "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+          "testId": "monitorsApplied",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "params": {
+            "reportClass": "Wug.report.monitorsapplied.MonitorsAppliedGroupReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_StateChangeAcknowledge.svg",
+          "name": "wug.STATE_CHANGE_ACK",
+          "roles": "WhatsUpGold_StateChangeAcknowledgement_ViewGroupOnly",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "State_Change_Acknowledge_View",
+          "params": {
+            "reportClass": "Wug.report.statechangeacknowledgment.StateChangeAcknowledgmentReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_StateChangeTimeline.svg",
+          "name": "wug.STATE_CHANGE_TIMELINE",
+          "roles": "WhatsUpGold_StateChangeTimeLine_ViewGroupAndSingle",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "State_Change_Timeline_View",
+          "params": {
+            "reportClass": "Wug.report.statechangetimeline.StateChangeTimelineReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_StateChangeTimeline.svg",
+          "name": "wug.DEVICE_STATE_CHANGE_TIMELINE",
+          "roles": "WhatsUpGold_StateChangeTimeLine_ViewGroupAndSingle",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Device_State_Change_Timeline_View",
+          "params": {
+            "reportClass": "Wug.report.devicestatechangetimeline.DeviceStateChangeTimelineReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_StateSummary.svg",
+          "name": "wug.STATE_SUMMARY",
+          "roles": "WhatsUpGold_StateChangeTimeLine_ViewGroupAndSingle",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "State_Summary_View",
+          "params": {
+            "reportClass": "Wug.report.statesummary.StateSummaryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_WebAlarmLog.svg",
+          "name": "wug.WEB_ALARMS",
+          "roles": "WhatsUpGold_ProblemAreas_ViewWebAlarms",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Web_Alarm_Log_View",
+          "params": {
+            "reportClass": "Wug.report.webalarms.WebAlarmsReport",
+            "isMainView": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "wug.ALERTS_AND_ACTIONS_NM",
+      "testId": "alertsAndActions",
+      "order": 4,
+      "items": [
+        {
+          "icon": "images/I_ActionsApplied.svg",
+          "name": "wug.ACTIONS_APPLIED",
+          "viewClass": "Wug.report.actionsapplied.ActionsAppliedReport",
+          "testId": "Actions_Applied_View",
+          "roles": "WhatsUpGold_ActionsApplied_ViewReport",
+          "params": {
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_ActionsApplied.svg",
+          "name": "wug.ACTION_POLICY_APPLIED",
+          "roles": "WhatsUpPlatform_Reports_AccessGroupAndDeviceReports",
+          "testId": "actionPoliciesApplied",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "params": {
+            "reportClass": "Wug.report.actionsappliedsummary.ActionsAppliedSummaryGroupReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_AlertCenter.svg",
+          "name": "wug.ALERT_CENTER_NAME",
+          "testId": "alertCenter",
+          "roles": "WhatsUpPlatform_AlertCenter_ViewReports",
+          "viewClass": "Wug.view.dashboard.alertcenter.AlertCenter",
+          "params": {
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_AlertCenterItems.svg",
+          "name": "wug.ALERT_CENTER_ITEMS",
+          "viewClass": "Wug.log.alertcenteritemsreport.AlertCenterItemsReport",
+          "roles": "WhatsUpPlatform_AlertCenter_ViewReports",
+          "testId": "Alert_Center_Items",
+          "params": {
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_AlertCenterLog.svg",
+          "name": "core.ALERT_CENTER_LOG",
+          "roles": "WhatsUpPlatform_AlertCenter_ViewReports",
+          "viewClass": "Wug.log.alertcenterlog.AlertCenterLog",
+          "testId": "Alert_Center_Logs",
+          "params": {
+            "isMainView": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "wug.INVENTORY",
+      "order": 5,
+      "testId": "Inventory_Wug_View",
+      "items": [
+        {
+          "icon": "images/I_AssetInventory.svg",
+          "name": "wug.ASSET_INVENTORY",
+          "roles": "WhatsUpGold_Inventory_ViewAssetInventory",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Asset_Inventory_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.assetinventory.AssetInventoryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_AssetDetailInventory.svg",
+          "name": "wug.ASSET_DETAIL_INVENTORY",
+          "roles": "WhatsUpGold_Inventory_ViewAssetInventory",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Asset_Detail_Inventory_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.assetdetailinventory.AssetDetailInventoryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_RefreshSummary.svg",
+          "name": "wug.REFRESH_SUMMARY",
+          "roles": "WhatsUpGold_Inventory_ViewAssetInventory",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Refresh_Summary_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.refreshsummary.RefreshSummaryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_InstalledSoftware.svg",
+          "name": "wug.INSTALLED_SOFTWARE",
+          "roles": "WhatsUpGold_Inventory_ViewInstalledSoftware",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Installed_Software_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.installedsoftware.InstalledSoftwareReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_AddressSummary.svg",
+          "name": "wug.ADDRESS_SUMMARY",
+          "roles": "WhatsUpGold_Inventory_ViewDeviceConnectivity",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Address_Summary_View_Img",
+          "params": {
+            "reportClass": "Wug.report.inventory.addresssummary.AddressSummaryReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_IPMACLookup.svg",
+          "name": "wug.IP_MAC_SIGHTING_REPORT",
+          "roles": "WhatsUpGold_Inventory_ViewDeviceConnectivity",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "IP_MAC_Lookup_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.ipmacsighting.IpMacSightingReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_NetworkConnectivity.svg",
+          "name": "wug.DEVICE_CONNECTIVITY",
+          "roles": "WhatsUpGold_Inventory_ViewDeviceConnectivity",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Network_Connectivity_View_Img",
+          "params": {
+            "reportClass": "Wug.report.inventory.deviceconnectivity.DeviceConnectivityReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_SwitchPortUtilization.svg",
+          "name": "wug.SWITCH_PORT_UTILIZATION",
+          "roles": "WhatsUpGold_Inventory_ViewSwitchPortUtilization",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Switch_Port_Util_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.switchportutilization.SwitchPortUtilizationReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_VLANView.svg",
+          "name": "wug.VLAN_VIEW",
+          "roles": "WhatsUpGold_Inventory_ViewVLanView",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "VLAN_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.vlan.VLANReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_SubnetView.svg",
+          "name": "wug.SUBNET_VIEW",
+          "roles": "WhatsUpGold_Inventory_ViewSubnetView",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Subnet_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.subnet.SubnetReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_ComputerSystem.svg",
+          "name": "wug.COMPUTER_SYSTEM",
+          "roles": "WhatsUpGold_Inventory_ViewComputerSystem",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Computer_System_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.computersystem.ComputerSystemReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_Bios.svg",
+          "name": "wug.BIOS",
+          "roles": "WhatsUpGold_Inventory_ViewBios",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Inventory_Bios_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.bios.BiosReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_SoftwareUpdates.svg",
+          "name": "wug.SOFTWARE_UPDATES",
+          "roles": "WhatsUpGold_Inventory_ViewSoftwareUpdates",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Software_Updates_View",
+          "params": {
+            "reportClass": "Wug.report.inventory.softwareupdates.SoftwareUpdatesReport",
+            "isMainView": true
+          }
+        },
+        {
+          "icon": "images/I_Services.svg",
+          "name": "wug.SERVICES",
+          "roles": "WhatsUpGold_Inventory_ViewWindowsServices",
+          "viewClass": "Reporting.fullpagepanel.FullPagePanel",
+          "testId": "Services_Viewer",
+          "params": {
+            "reportClass": "Wug.report.inventory.windowsservices.WindowsServicesReport",
+            "isMainView": true
+          }
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "icon": "images/I_Ping.svg",
+      "name": "wug.PING",
+      "roles": "WhatsUpPlatform_Tools_AccessTools",
+      "skipRouting": true,
+      "testId": "pingMenu",
+      "viewClass": "Wug.view.tools.ping.Ping"
+    },
+    {
+      "icon": "images/I_SNMPMIBWalker.svg",
+      "name": "wug.TITLE_MIB_WALKER",
+      "roles": "WhatsUpPlatform_Tools_AccessTools",
+      "skipRouting": true,
+      "testId": "mibWalkerMenu",
+      "viewClass": "Wug.view.tools.mibwalker.MibWalker"
+    }
+  ]
+}
