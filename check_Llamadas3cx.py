@@ -339,7 +339,12 @@ def encontrar_ventana_3cx():
     return None
 
 
-def check_3cx():
+def check_3cx() -> tuple[bool, Path]:
+    """Ejecuta la verificación de llamada saliente por 3CX.
+
+    Devuelve (ok, screenshot_path) — el screenshot se genera siempre que sea
+    posible, aunque falle, para poder adjuntarlo como evidencia en el reporte.
+    """
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     screenshot_path = EVIDENCIA_DIR / f"{SITIO_NOMBRE}_{timestamp}.png"
 
@@ -355,7 +360,7 @@ def check_3cx():
                 pyautogui.screenshot(str(screenshot_path))
             except Exception:
                 pass
-            return False
+            return False, screenshot_path
 
         if fue_lanzado_ahora:
             print(f"[{SITIO_NOMBRE}] 3CX recién lanzado — esperando {SEG_ESPERAR_REGISTRO_PBX}s para que se registre en el PBX...")
@@ -376,7 +381,7 @@ def check_3cx():
                 print(f"    Screenshot: {screenshot_path}")
             except Exception:
                 pass
-            return False
+            return False, screenshot_path
 
         print(f"[{SITIO_NOMBRE}] ✓ Ventana detectada: '{ventana.title}'")
 
@@ -400,7 +405,7 @@ def check_3cx():
                 print(f"    Screenshot: {screenshot_path}")
             except Exception:
                 pass
-            return False
+            return False, screenshot_path
 
         print(f"[{SITIO_NOMBRE}] ✓ 3CX está en primer plano.")
         time.sleep(SEG_TRAS_ACTIVAR)
@@ -502,7 +507,7 @@ def check_3cx():
         time.sleep(0.5)
 
         print(f"[{SITIO_NOMBRE}] ✓ OK — Llamada saliente funcionando")
-        return True
+        return True, screenshot_path
 
     except Exception as e:
         print(f"[{SITIO_NOMBRE}] ✗ ERROR: {type(e).__name__}: {e}")
@@ -511,10 +516,10 @@ def check_3cx():
             print(f"    Screenshot del error: {screenshot_path}")
         except Exception:
             pass
-        return False
+        return False, screenshot_path
 
 
 if __name__ == "__main__":
-    resultado = check_3cx()
+    resultado, _ = check_3cx()
     print()
     exit(0 if resultado else 1)

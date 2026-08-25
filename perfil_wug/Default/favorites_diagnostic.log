@@ -34,3 +34,370 @@
 2026-07-21 17:13:38.686: [INFO] VisibilityChanged: 0
 2026-07-21 17:13:38.806: [INFO] BookmarkModelLoaded, ids_reassigned: 0
 2026-07-21 17:13:38.806: [INFO] OnDoneLoading sync enabled: 0
+2026-07-29 19:44:09.749: [INFO] VisibilityChanged: 0
+2026-07-29 19:44:09.898: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-07-29 19:44:09.898: [INFO] OnDoneLoading sync enabled: 0
+2026-07-29 19:53:11.096: [INFO] VisibilityChanged: 0
+2026-07-29 19:53:11.216: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-07-29 19:53:11.217: [INFO] OnDoneLoading sync enabled: 0
+2026-07-29 19:58:47.932: [INFO] VisibilityChanged: 0
+2026-07-29 19:58:48.024: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-07-29 19:58:48.024: [INFO] OnDoneLoading sync enabled: 0
+2026-08-01 21:16:05.755: [INFO] VisibilityChanged: 0
+2026-08-01 21:16:05.885: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-01 21:16:05.885: [INFO] OnDoneLoading sync enabled: 0
+2026-08-01 21:31:46.853: [INFO] VisibilityChanged: 0
+2026-08-01 21:31:46.954: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-01 21:31:46.954: [INFO] OnDoneLoading sync enabled: 0
+2026-08-03 00:33:02.247: [INFO] VisibilityChanged: 0
+2026-08-03 00:33:02.348: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-03 00:33:02.348: [INFO] OnDoneLoading sync enabled: 0
+2026-08-03 00:46:32.307: [INFO] VisibilityChanged: 0
+2026-08-03 00:46:32.403: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-03 00:46:32.403: [INFO] OnDoneLoading sync enabled: 0
+2026-08-03 00:54:05.725: [INFO] VisibilityChanged: 0
+2026-08-03 00:54:05.813: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-03 00:54:05.813: [INFO] OnDoneLoading sync enabled: 0
+2026-08-03 01:00:35.352: [INFO] VisibilityChanged: 0
+2026-08-03 01:00:35.453: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-03 01:00:35.453: [INFO] OnDoneLoading sync enabled: 0
+2026-08-04 11:45:38.781: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-04 11:45:38.781: [INFO] Profiles total count: 1
+2026-08-04 11:45:38.782: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-03T01:00:35.422Z
+2026-08-04 11:45:38.782: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-04 11:45:38.782: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-03T01:00:35.422Z
+2026-08-04 11:45:38.782: [INFO] VisibilityChanged: 0
+2026-08-04 11:45:38.912: [INFO] OnDoneLoading sync enabled: 0
+2026-08-04 11:45:38.912: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-04 11:45:38.912: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-04 11:45:38.912: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-04 11:46:09.797: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-04 11:59:40.358: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-04 11:59:40.359: [INFO] Profiles total count: 1
+2026-08-04 11:59:40.359: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-04T11:45:38.874Z
+2026-08-04 11:59:40.359: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-04 11:59:40.359: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-04T11:45:38.874Z
+2026-08-04 11:59:40.359: [INFO] VisibilityChanged: 0
+2026-08-04 11:59:40.455: [INFO] OnDoneLoading sync enabled: 0
+2026-08-04 11:59:40.455: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-04 11:59:40.455: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-04 11:59:40.455: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-04 12:00:05.842: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-05 11:59:18.329: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-05 11:59:18.329: [INFO] Profiles total count: 1
+2026-08-05 11:59:18.330: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-04T11:59:40.428Z
+2026-08-05 11:59:18.330: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-05 11:59:18.330: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-04T11:59:40.428Z
+2026-08-05 11:59:18.330: [INFO] VisibilityChanged: 0
+2026-08-05 11:59:19.295: [INFO] OnDoneLoading sync enabled: 0
+2026-08-05 11:59:19.295: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-05 11:59:19.295: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-05 11:59:19.295: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-05 12:00:28.447: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-05 12:02:08.573: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-05 12:02:08.573: [INFO] Profiles total count: 1
+2026-08-05 12:02:08.573: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-05T11:59:19.269Z
+2026-08-05 12:02:08.573: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-05 12:02:08.573: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-05T11:59:19.269Z
+2026-08-05 12:02:08.573: [INFO] VisibilityChanged: 0
+2026-08-05 12:02:08.668: [INFO] OnDoneLoading sync enabled: 0
+2026-08-05 12:02:08.668: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-05 12:02:08.668: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-05 12:02:08.668: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-05 12:03:17.582: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-05 12:03:25.622: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-05 12:03:25.622: [INFO] Profiles total count: 1
+2026-08-05 12:03:25.622: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-05T12:03:17.136Z
+2026-08-05 12:03:25.622: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-05 12:03:25.622: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-05T12:03:17.136Z
+2026-08-05 12:03:25.622: [INFO] VisibilityChanged: 0
+2026-08-05 12:03:25.731: [INFO] OnDoneLoading sync enabled: 0
+2026-08-05 12:03:25.731: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-05 12:03:25.731: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-05 12:03:25.731: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-05 12:03:53.725: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 16:59:06.263: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 16:59:06.263: [INFO] Profiles total count: 1
+2026-08-11 16:59:06.265: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-05T12:03:25.703Z
+2026-08-11 16:59:06.265: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 16:59:06.265: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-05T12:03:25.703Z
+2026-08-11 16:59:06.265: [INFO] VisibilityChanged: 0
+2026-08-11 16:59:06.393: [INFO] OnDoneLoading sync enabled: 0
+2026-08-11 16:59:06.393: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-11 16:59:06.393: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-11 16:59:06.393: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 16:59:35.720: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 17:14:08.368: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 17:14:08.368: [INFO] Profiles total count: 1
+2026-08-11 17:14:08.369: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T16:59:06.362Z
+2026-08-11 17:14:08.369: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 17:14:08.369: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T16:59:06.362Z
+2026-08-11 17:14:08.369: [INFO] VisibilityChanged: 0
+2026-08-11 17:14:08.489: [INFO] OnDoneLoading sync enabled: 0
+2026-08-11 17:14:08.489: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-11 17:14:08.490: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-11 17:14:08.490: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 17:14:43.398: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 17:35:58.702: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 17:35:58.702: [INFO] Profiles total count: 1
+2026-08-11 17:35:58.703: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T17:14:08.451Z
+2026-08-11 17:35:58.703: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 17:35:58.703: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T17:14:08.451Z
+2026-08-11 17:35:58.703: [INFO] VisibilityChanged: 0
+2026-08-11 17:35:58.810: [INFO] OnDoneLoading sync enabled: 0
+2026-08-11 17:35:58.810: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-11 17:35:58.810: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-11 17:35:58.810: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 17:36:31.357: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 18:36:47.670: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 18:36:47.670: [INFO] Profiles total count: 1
+2026-08-11 18:36:47.671: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T17:35:58.777Z
+2026-08-11 18:36:47.671: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 18:36:47.671: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T17:35:58.777Z
+2026-08-11 18:36:47.671: [INFO] VisibilityChanged: 0
+2026-08-11 18:36:47.785: [INFO] OnDoneLoading sync enabled: 0
+2026-08-11 18:36:47.785: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-11 18:36:47.785: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-11 18:36:47.785: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 18:37:20.345: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 19:16:08.836: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 19:16:08.836: [INFO] Profiles total count: 1
+2026-08-11 19:16:08.837: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T18:36:47.751Z
+2026-08-11 19:16:08.837: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-11 19:16:08.837: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T18:36:47.751Z
+2026-08-11 19:16:08.837: [INFO] VisibilityChanged: 0
+2026-08-11 19:16:08.947: [INFO] OnDoneLoading sync enabled: 0
+2026-08-11 19:16:08.947: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-11 19:16:08.947: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-11 19:16:08.947: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-11 19:17:00.803: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 14:13:59.363: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 14:13:59.363: [INFO] Profiles total count: 1
+2026-08-12 14:13:59.364: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T19:16:08.915Z
+2026-08-12 14:13:59.364: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 14:13:59.364: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-11T19:16:08.915Z
+2026-08-12 14:13:59.364: [INFO] VisibilityChanged: 0
+2026-08-12 14:13:59.524: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 14:13:59.524: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 14:13:59.524: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 14:13:59.524: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 14:15:03.673: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 14:30:50.103: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 14:30:50.103: [INFO] Profiles total count: 1
+2026-08-12 14:30:50.104: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T14:13:59.469Z
+2026-08-12 14:30:50.104: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 14:30:50.104: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T14:13:59.469Z
+2026-08-12 14:30:50.104: [INFO] VisibilityChanged: 0
+2026-08-12 14:30:50.222: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 14:30:50.223: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 14:30:50.223: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 14:30:50.223: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 14:32:28.958: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 14:35:37.958: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 14:35:37.958: [INFO] Profiles total count: 1
+2026-08-12 14:35:37.958: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T14:31:14.509Z
+2026-08-12 14:35:37.958: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 14:35:37.958: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T14:31:14.509Z
+2026-08-12 14:35:37.958: [INFO] VisibilityChanged: 0
+2026-08-12 14:35:38.064: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 14:35:38.064: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 14:35:38.064: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 14:35:38.064: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 14:36:10.345: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 15:00:55.631: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 15:00:55.631: [INFO] Profiles total count: 1
+2026-08-12 15:00:55.633: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T14:35:38.033Z
+2026-08-12 15:00:55.633: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 15:00:55.633: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T14:35:38.033Z
+2026-08-12 15:00:55.633: [INFO] VisibilityChanged: 0
+2026-08-12 15:00:55.773: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 15:00:55.773: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 15:00:55.773: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 15:00:55.773: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 15:01:30.039: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 15:47:27.140: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 15:47:27.140: [INFO] Profiles total count: 1
+2026-08-12 15:47:27.141: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T15:00:55.728Z
+2026-08-12 15:47:27.141: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 15:47:27.141: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T15:00:55.728Z
+2026-08-12 15:47:27.141: [INFO] VisibilityChanged: 0
+2026-08-12 15:47:27.269: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 15:47:27.269: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 15:47:27.269: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 15:47:27.269: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 15:50:06.237: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 15:50:06.237: [INFO] Profiles total count: 1
+2026-08-12 15:50:06.238: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T15:48:17.320Z
+2026-08-12 15:50:06.238: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 15:50:06.238: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T15:48:17.320Z
+2026-08-12 15:50:06.238: [INFO] VisibilityChanged: 0
+2026-08-12 15:50:06.360: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 15:50:06.360: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 15:50:06.360: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 15:50:06.360: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 15:50:40.503: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 17:12:40.382: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 17:12:40.382: [INFO] Profiles total count: 1
+2026-08-12 17:12:40.383: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T15:50:06.324Z
+2026-08-12 17:12:40.383: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-12 17:12:40.383: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T15:50:06.324Z
+2026-08-12 17:12:40.383: [INFO] VisibilityChanged: 0
+2026-08-12 17:12:40.494: [INFO] OnDoneLoading sync enabled: 0
+2026-08-12 17:12:40.494: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-12 17:12:40.494: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-12 17:12:40.494: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-12 17:13:14.190: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-13 15:00:16.571: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-13 15:00:16.571: [INFO] Profiles total count: 1
+2026-08-13 15:00:16.572: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T17:12:40.466Z
+2026-08-13 15:00:16.572: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-13 15:00:16.572: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-12T17:12:40.466Z
+2026-08-13 15:00:16.572: [INFO] VisibilityChanged: 0
+2026-08-13 15:00:16.707: [INFO] OnDoneLoading sync enabled: 0
+2026-08-13 15:00:16.707: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-13 15:00:16.707: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-13 15:00:16.707: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-13 15:01:55.572: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-13 15:03:06.566: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-13 15:03:06.566: [INFO] Profiles total count: 1
+2026-08-13 15:03:06.566: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-13T15:00:55.288Z
+2026-08-13 15:03:06.566: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-13 15:03:06.566: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-13T15:00:55.288Z
+2026-08-13 15:03:06.566: [INFO] VisibilityChanged: 0
+2026-08-13 15:03:06.694: [INFO] OnDoneLoading sync enabled: 0
+2026-08-13 15:03:06.694: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-13 15:03:06.694: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-13 15:03:06.694: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-13 15:03:39.778: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-13 15:23:59.965: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-13 15:23:59.965: [INFO] Profiles total count: 1
+2026-08-13 15:23:59.965: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-13T15:03:06.653Z
+2026-08-13 15:23:59.965: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-13 15:23:59.965: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-13T15:03:06.653Z
+2026-08-13 15:23:59.965: [INFO] VisibilityChanged: 0
+2026-08-13 15:24:00.198: [INFO] OnDoneLoading sync enabled: 0
+2026-08-13 15:24:00.198: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-13 15:24:00.198: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-13 15:24:00.198: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-13 15:24:34.921: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-19 13:56:12.044: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-19 13:56:12.044: [INFO] Profiles total count: 1
+2026-08-19 13:56:12.045: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-13T15:24:05.500Z
+2026-08-19 13:56:12.045: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-19 13:56:12.045: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-13T15:24:05.500Z
+2026-08-19 13:56:12.046: [INFO] VisibilityChanged: 0
+2026-08-19 13:56:12.152: [INFO] OnDoneLoading sync enabled: 0
+2026-08-19 13:56:12.152: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-19 13:56:12.152: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-19 13:56:12.153: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-19 13:57:01.449: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-19 14:08:18.921: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-19 14:08:18.921: [INFO] Profiles total count: 1
+2026-08-19 14:08:18.922: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-19T13:56:26.889Z
+2026-08-19 14:08:18.922: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-19 14:08:18.922: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-19T13:56:26.889Z
+2026-08-19 14:08:18.922: [INFO] VisibilityChanged: 0
+2026-08-19 14:08:19.050: [INFO] OnDoneLoading sync enabled: 0
+2026-08-19 14:08:19.050: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-19 14:08:19.050: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-19 14:08:19.050: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-19 14:08:54.298: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 13:44:45.071: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 13:44:45.071: [INFO] Profiles total count: 1
+2026-08-24 13:44:45.072: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-19T14:08:19.012Z
+2026-08-24 13:44:45.072: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 13:44:45.072: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-19T14:08:19.012Z
+2026-08-24 13:44:45.072: [INFO] VisibilityChanged: 0
+2026-08-24 13:44:45.137: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 13:44:45.137: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 13:44:45.137: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 13:44:45.137: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 13:46:23.769: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 13:46:47.736: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 13:46:47.736: [INFO] Profiles total count: 1
+2026-08-24 13:46:47.737: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T13:44:45.110Z
+2026-08-24 13:46:47.737: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 13:46:47.737: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T13:44:45.110Z
+2026-08-24 13:46:47.737: [INFO] VisibilityChanged: 0
+2026-08-24 13:46:47.799: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 13:46:47.799: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 13:46:47.799: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 13:46:47.799: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 13:47:21.641: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 13:51:41.107: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 13:51:41.107: [INFO] Profiles total count: 1
+2026-08-24 13:51:41.108: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T13:46:47.768Z
+2026-08-24 13:51:41.108: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 13:51:41.108: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T13:46:47.768Z
+2026-08-24 13:51:41.108: [INFO] VisibilityChanged: 0
+2026-08-24 13:51:41.212: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 13:51:41.212: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 13:51:41.212: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 13:51:41.212: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 13:52:29.396: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 15:11:48.968: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 15:11:48.968: [INFO] Profiles total count: 1
+2026-08-24 15:11:48.969: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T13:51:41.155Z
+2026-08-24 15:11:48.969: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 15:11:48.969: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T13:51:41.155Z
+2026-08-24 15:11:48.969: [INFO] VisibilityChanged: 0
+2026-08-24 15:11:49.041: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 15:11:49.042: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 15:11:49.042: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 15:11:49.042: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 15:12:21.370: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 15:30:18.394: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 15:30:18.395: [INFO] Profiles total count: 1
+2026-08-24 15:30:18.395: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T15:11:48.999Z
+2026-08-24 15:30:18.395: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 15:30:18.395: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T15:11:48.999Z
+2026-08-24 15:30:18.395: [INFO] VisibilityChanged: 0
+2026-08-24 15:30:18.450: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 15:30:18.450: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 15:30:18.450: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 15:30:18.450: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 15:30:52.618: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 15:45:30.563: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 15:45:30.563: [INFO] Profiles total count: 1
+2026-08-24 15:45:30.564: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T15:30:18.421Z
+2026-08-24 15:45:30.564: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 15:45:30.564: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T15:30:18.421Z
+2026-08-24 15:45:30.564: [INFO] VisibilityChanged: 0
+2026-08-24 15:45:30.652: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 15:45:30.652: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 15:45:30.652: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 15:45:30.652: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 15:46:06.457: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 17:20:24.155: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 17:20:24.155: [INFO] Profiles total count: 1
+2026-08-24 17:20:24.155: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T15:45:30.616Z
+2026-08-24 17:20:24.155: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 17:20:24.155: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T15:45:30.616Z
+2026-08-24 17:20:24.155: [INFO] VisibilityChanged: 0
+2026-08-24 17:20:24.223: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 17:20:24.223: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 17:20:24.223: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 17:20:24.223: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 17:21:00.211: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 17:46:52.536: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 17:46:52.536: [INFO] Profiles total count: 1
+2026-08-24 17:46:52.536: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T17:20:24.197Z
+2026-08-24 17:46:52.536: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-24 17:46:52.536: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T17:20:24.197Z
+2026-08-24 17:46:52.536: [INFO] VisibilityChanged: 0
+2026-08-24 17:46:52.612: [INFO] OnDoneLoading sync enabled: 0
+2026-08-24 17:46:52.612: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-24 17:46:52.612: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-24 17:46:52.612: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-24 17:47:32.034: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-25 12:09:57.486: [INFO] CurrentProfilePath: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-25 12:09:57.486: [INFO] Profiles total count: 1
+2026-08-25 12:09:57.487: [INFO] Profile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T17:46:52.579Z
+2026-08-25 12:09:57.487: [INFO] LastUsedProfileDir: C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default
+2026-08-25 12:09:57.487: [INFO] MostRecentlyActiveProfile: name=Perfil 1 path=C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default lastActive=2026-08-24T17:46:52.579Z
+2026-08-25 12:09:57.487: [INFO] VisibilityChanged: 0
+2026-08-25 12:09:57.530: [INFO] OnDoneLoading sync enabled: 0
+2026-08-25 12:09:57.530: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-25 12:09:57.530: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-25 12:09:57.530: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-25 12:11:36.042: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1

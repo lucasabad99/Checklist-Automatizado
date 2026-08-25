@@ -11,6 +11,8 @@ Uso:
 """
 
 import time
+from datetime import datetime
+
 import win32com.client
 
 
@@ -45,6 +47,22 @@ def enviar():
     print(f"Enviando mail a {DESTINATARIO} ...")
     mail.Send()
     print("✓ Mail enviado (se procesará desde la bandeja de salida de Outlook)")
+
+
+def enviar_mail_tickets() -> tuple[bool, dict]:
+    """Wrapper de enviar() que devuelve (ok, info) para el reporte diario."""
+    info = {
+        "destinatario": DESTINATARIO,
+        "asunto": ASUNTO,
+        "timestamp": datetime.now(),
+        "error": None,
+    }
+    try:
+        enviar()
+        return True, info
+    except Exception as e:
+        info["error"] = f"{type(e).__name__}: {e}"
+        return False, info
 
 
 if __name__ == "__main__":

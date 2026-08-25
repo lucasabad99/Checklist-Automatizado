@@ -1,6 +1,6 @@
-2026/07/21-14:07:32.734 6658 Reusing MANIFEST C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2026/07/21-14:07:32.739 6658 Recovering log #32
-2026/07/21-14:07:32.741 6658 Reusing old log C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/000032.log 
-2026/07/21-14:07:32.920 311c Level-0 table #37: started
-2026/07/21-14:07:32.926 311c Level-0 table #37: 683144 bytes OK
-2026/07/21-14:07:32.928 311c Delete type=0 #32
+2026/08/24-14:46:56.025 8e98 Reusing MANIFEST C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/24-14:46:56.029 8e98 Recovering log #162
+2026/08/24-14:46:56.030 8e98 Reusing old log C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/000162.log 
+2026/08/24-14:46:56.147 8d08 Level-0 table #167: started
+2026/08/24-14:46:56.154 8d08 Level-0 table #167: 683376 bytes OK
+2026/08/24-14:46:56.157 8d08 Delete type=0 #162

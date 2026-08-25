@@ -20,7 +20,7 @@ from pathlib import Path
 
 MAIL_DESTINATARIO = "lucasabad80@gmail.com"   # ← cambiá por el mail del gerente
 MAIL_CC           = ""                         # ← CC opcional (ej: "jefe@pecom.com.ar")
-NOMBRE_REMITENTE  = "Lucas Abad"
+NOMBRE_REMITENTE  = "Lucas Emir Abad Cancinos"
 CARGO_REMITENTE   = "IT & Innovación"
 
 TOTAL_PASOS = 7
@@ -116,9 +116,9 @@ def paso_3cx():
 def paso_citrix_rdp():
     _separador(3, "Acceso Citrix / Remote Desktop Connection")
     try:
-        from check_citrix import check_citrix_rdp
-        ok = check_citrix_rdp()
-        _reg("Citrix / Remote Desktop", ok, "Screenshots guardados en ./evidencias/")
+        from check_citrix_portal import check_citrix_portal
+        ok = check_citrix_portal()
+        _reg("Citrix / Remote Desktop", ok, "Screenshots guardados en ./evidencias_citrix_portal/")
     except SystemExit as e:
         _reg("Citrix / Remote Desktop", e.code == 0)
     except Exception as e:

@@ -3,10 +3,11 @@ check_whatsupgold.py
 --------------------
 Módulo del Checklist Automatizado - Pecom Energía
 
-Captura como evidencia los dos widgets del dashboard de WhatsUp Gold que se
+Captura como evidencia los widgets del dashboard de WhatsUp Gold que se
 adjuntan en el reporte diario:
     - Down Active Monitors  (dashboard viewId=859)
     - Disk Utilization       (dashboard viewId=863)
+    - Memory Utilization     (dashboard viewId=863, mismo dashboard que Disk)
 
 Enfoque:
     - Playwright con perfil persistente de Microsoft Edge (Netskope + sesión SSO/WUG).
@@ -15,9 +16,14 @@ Enfoque:
     - Los IDs 'reportpanel-XXXX' de ExtJS son dinámicos, por eso ubicamos los
       widgets por el texto del título (estable) y subimos al ancestro
       'reportpanel-*' con XPath.
+    - Cuando varios widgets viven en el mismo dashboard, cargamos la URL una
+      sola vez y capturamos cada panel navegando por scroll.
+    - Antes de mandar el mail, las evidencias PNG se optimizan a JPEG en un
+      subfolder aparte para no reventar el límite de 102KB de Gmail
+      (los PNG originales quedan intactos como evidencia oficial).
 
 Retorna:
-    - True  si capturó las dos evidencias sin errores.
+    - True  si capturó todas las evidencias sin errores.
     - False si algún widget falló o hubo timeout / login pendiente.
 """
 
@@ -36,24 +42,32 @@ BASE_DIR = Path(__file__).parent.resolve()
 PROFILE_DIR = BASE_DIR / "perfil_wug"
 EVIDENCIAS_DIR = BASE_DIR / "evidencias_whatsupgold"
 
-# Dashboards a recorrer. Si el día de mañana se agrega uno más,
-# alcanza con sumar otro dict a esta lista.
+# Dashboards a recorrer. Cada dashboard puede tener uno o más widgets;
+# la URL se carga UNA sola vez por dashboard y después se capturan
+# todos los widgets navegando por scroll (así no recargamos ExtJS
+# innecesariamente cuando hay varios widgets en la misma vista).
+#
+# Para sumar widgets más adelante (ej. Interface Utilization),
+# solo hay que agregar otro dict al array 'widgets' del dashboard correspondiente.
 DASHBOARDS = [
     {
-        "nombre": "down_active_monitors",
-        "titulo": "Down Active Monitors",
         "url": (
             "https://monitoreo.pecomenergia.com.ar/NmConsole/"
             "#v=Wug_view_dashboard_Home/p=%7B%22viewId%22%3A859%7D"
         ),
+        "widgets": [
+            {"nombre": "down_active_monitors", "titulo": "Down Active Monitors"},
+        ],
     },
     {
-        "nombre": "disk_utilization",
-        "titulo": "Disk Utilization",
         "url": (
             "https://monitoreo.pecomenergia.com.ar/NmConsole/"
             "#v=Wug_view_dashboard_Home/p=%7B%22viewId%22%3A863%7D"
         ),
+        "widgets": [
+            {"nombre": "disk_utilization",   "titulo": "Disk Utilization"},
+            {"nombre": "memory_utilization", "titulo": "Memory Utilization"},
+        ],
     },
 ]
 
@@ -71,10 +85,25 @@ ASUNTO_MAIL        = "WhatsUp Gold - Reporte Diario"
 MODO_PREVIEW_MAIL  = False
 
 # --- Umbrales de análisis ---
-# En WUG los discos amarillos son "warning" (por debajo del umbral crítico)
+# En WUG los ítems amarillos son "warning" (por debajo del umbral crítico)
 # y los rojos son los que están efectivamente por encima del umbral crítico.
-# El corte visual en el dashboard es 90%. Si en el futuro cambia, se ajusta acá.
-DISK_UMBRAL_PCT = 90.0
+# El corte visual en los dashboards es 90%. Si en el futuro cambia, se ajusta acá.
+DISK_UMBRAL_PCT   = 90.0
+MEMORY_UMBRAL_PCT = 90.0   # RAM: subir a 92/95 si genera demasiados falsos positivos
+
+# --- Optimización de imágenes para el mail ---
+# Gmail corta ("Message clipped") los mails cuyo MIME body supera ~102KB.
+# Outlook, al adjuntar imágenes inline vía CID (PR_ATTACH_CONTENT_ID), las
+# embebe en el body como base64 dentro de un multipart/related, así que 3-4
+# PNGs de dashboards ExtJS a 1600px fácil superan el límite.
+# Solución: redimensionar + convertir a JPEG antes de adjuntar.
+# Los PNG originales quedan intactos en EVIDENCIAS_DIR como evidencia oficial;
+# las versiones optimizadas van a un subfolder aparte.
+# NOTA: Outlook desktop no tiene este límite, esto es solo para Gmail y
+# clientes web modernos con límites similares.
+OPTIMIZAR_IMAGENES_MAIL = True
+IMG_ANCHO_MAX_PX        = 1000   # ancho máximo en px (mantiene ratio)
+IMG_CALIDAD_JPEG        = 80     # calidad JPEG 1-95 (80 es buen balance nitidez/peso)
 
 # Categorías Unicode que descartamos al limpiar texto de celdas:
 #   Cf = Format          (ZWSP \u200b, ZWJ, BOM, LRM/RLM, etc)
@@ -282,27 +311,36 @@ def _extraer_filas_grid(panel) -> list:
     return filas
 
 
-def _generar_resumen_widget(nombre_dashboard: str, filas: list) -> str:
+def _generar_resumen_widget(nombre_dashboard: str, filas: list) -> tuple[str, int, list]:
     """
-    Genera un texto HTML descriptivo con lo que trae el widget.
-    Se inserta en el mail arriba de cada imagen.
+    Genera un texto HTML descriptivo con lo que trae el widget (se inserta en
+    el mail arriba de cada imagen), la cantidad de items críticos detectados
+    (caídos / por encima del umbral) para KPIs numéricos, y la lista plana de
+    esos items críticos (sin HTML) para consumidores que arman su propia
+    interfaz en vez de parsear el resumen_html ya formateado para mail —
+    ver dashboard_reporte_diario.py / tablero.py.
 
-    'nombre_dashboard' es el 'nombre' del dict DASHBOARDS
-    (por ejemplo 'down_active_monitors' o 'disk_utilization').
+    'nombre_dashboard' es el 'nombre' del widget en DASHBOARDS
+    (por ejemplo 'down_active_monitors', 'disk_utilization', 'memory_utilization').
+
+    Devuelve (resumen_html, cantidad_criticos, items_criticos).
+    'items_criticos' es una lista de {"nombre": str, "valor": str}.
     """
     if not filas:
-        return "<i>Sin registros para reportar.</i>"
+        return "<i>Sin registros para reportar.</i>", 0, []
 
     if nombre_dashboard == "down_active_monitors":
         # Estructura esperada por fila (post-limpieza): [Device, Count, Status]
         devices = [f[0] for f in filas if len(f) >= 1 and f[0]]
         if not devices:
-            return "<i>Sin monitores caídos.</i>"
-        return (
+            return "<i>Sin monitores caídos.</i>", 0, []
+        texto = (
             f"Se detectaron <b>{len(devices)}</b> "
             f"{'monitor caído' if len(devices) == 1 else 'monitores caídos'}: "
             f"{', '.join(devices)}."
         )
+        items = [{"nombre": d, "valor": "CAÍDO"} for d in devices]
+        return texto, len(devices), items
 
     if nombre_dashboard == "disk_utilization":
         # Estructura esperada por fila (post-limpieza): [Device, Disk, Size, % Used]
@@ -312,13 +350,13 @@ def _generar_resumen_widget(nombre_dashboard: str, filas: list) -> str:
             if len(f) >= 4:
                 pct = _parsear_porcentaje(f[-1])  # % Used = última columna
                 if pct is not None and pct >= DISK_UMBRAL_PCT:
-                    criticos.append(f"{f[0]} ({f[1]}) — <b>{f[-1]}</b>")
+                    criticos.append({"nombre": f"{f[0]} ({f[1]})", "valor": f[-1]})
 
         total = len(criticos)
         if total == 0:
             return (
                 f"<i>Sin discos por encima del umbral crítico "
-                f"({DISK_UMBRAL_PCT:.0f}%).</i>"
+                f"({DISK_UMBRAL_PCT:.0f}%).</i>", 0, []
             )
 
         texto = (
@@ -326,13 +364,114 @@ def _generar_resumen_widget(nombre_dashboard: str, filas: list) -> str:
             f"{'disco' if total == 1 else 'discos'} "
             f"por encima del umbral crítico ({DISK_UMBRAL_PCT:.0f}%)."
         )
-        top = criticos[:5]
+        top = [f"{c['nombre']} — <b>{c['valor']}</b>" for c in criticos[:5]]
         sufijo = " Top 5: " if total > 5 else " Detalle: "
         texto += sufijo + "; ".join(top) + "."
-        return texto
+        return texto, total, criticos
+
+    if nombre_dashboard == "memory_utilization":
+        # Estructura esperada por fila (post-limpieza): [Device, Description, Size, % Avg]
+        # Description viene "Physical Memory (N)" o "Virtual Memory (N)".
+        # Contamos como crítico cualquier fila (física o virtual) que supere el umbral.
+        criticos = []
+        for f in filas:
+            if len(f) >= 4:
+                pct = _parsear_porcentaje(f[-1])  # % Avg = última columna
+                if pct is not None and pct >= MEMORY_UMBRAL_PCT:
+                    # Mostramos Device + tipo de memoria (Physical/Virtual) para distinguir
+                    criticos.append({"nombre": f"{f[0]} — {f[1]}", "valor": f[-1]})
+
+        total = len(criticos)
+        if total == 0:
+            return (
+                f"<i>Sin memorias por encima del umbral crítico "
+                f"({MEMORY_UMBRAL_PCT:.0f}%).</i>", 0, []
+            )
+
+        texto = (
+            f"<b>{total}</b> "
+            f"{'memoria' if total == 1 else 'memorias'} "
+            f"por encima del umbral crítico ({MEMORY_UMBRAL_PCT:.0f}%)."
+        )
+        top = [f"{c['nombre']} — <b>{c['valor']}</b>" for c in criticos[:5]]
+        sufijo = " Top 5: " if total > 5 else " Detalle: "
+        texto += sufijo + "; ".join(top) + "."
+        return texto, total, criticos
 
     # Default genérico si más adelante agregamos otro widget
-    return f"<b>{len(filas)}</b> registro(s) en el widget."
+    return f"<b>{len(filas)}</b> registro(s) en el widget.", len(filas), []
+
+
+def _optimizar_imagen_para_mail(ruta_original: Path) -> Path:
+    """
+    Genera una copia optimizada de la imagen para embebido inline en el mail:
+      - Redimensiona a IMG_ANCHO_MAX_PX si es más ancha (mantiene ratio).
+      - Convierte a JPEG con IMG_CALIDAD_JPEG.
+
+    Esto es necesario porque Gmail corta ("[Mensaje acortado]") mails cuyo
+    MIME body supera ~102KB, y Outlook al usar CID inline mete las imágenes
+    base64-encodeadas dentro del multipart/related del body.
+
+    Los PNG originales quedan intactos como evidencia oficial en EVIDENCIAS_DIR;
+    las copias optimizadas van a un subfolder aparte.
+
+    Si Pillow no está instalado o si OPTIMIZAR_IMAGENES_MAIL=False, devuelve
+    la ruta original y el mail se manda con las imágenes tal cual (arriesgando
+    clipping en Gmail).
+    """
+    if not OPTIMIZAR_IMAGENES_MAIL:
+        return ruta_original
+
+    try:
+        from PIL import Image
+    except ImportError:
+        print("[WUG][MAIL] Warning: Pillow no está instalado, no se optimizan "
+              "las imágenes (pueden quedar cortadas en Gmail). "
+              "Instalá con: pip install Pillow")
+        return ruta_original
+
+    try:
+        dir_optimizadas = ruta_original.parent / "optimizadas_mail"
+        dir_optimizadas.mkdir(exist_ok=True)
+        ruta_opt = dir_optimizadas / (ruta_original.stem + ".jpg")
+
+        with Image.open(ruta_original) as img:
+            # PNG de screenshots suelen tener canal alpha. Los aplanamos
+            # sobre fondo blanco antes de pasar a JPEG (que no soporta alpha).
+            if img.mode == "RGBA":
+                fondo = Image.new("RGB", img.size, (255, 255, 255))
+                fondo.paste(img, mask=img.split()[-1])
+                img = fondo
+            elif img.mode == "LA":
+                fondo = Image.new("RGB", img.size, (255, 255, 255))
+                fondo.paste(img.convert("RGBA"), mask=img.convert("RGBA").split()[-1])
+                img = fondo
+            elif img.mode == "P":
+                img = img.convert("RGBA")
+                fondo = Image.new("RGB", img.size, (255, 255, 255))
+                fondo.paste(img, mask=img.split()[-1])
+                img = fondo
+            elif img.mode != "RGB":
+                img = img.convert("RGB")
+
+            # Redimensionar si supera el ancho máximo (manteniendo ratio)
+            if img.width > IMG_ANCHO_MAX_PX:
+                nuevo_alto = int(img.height * IMG_ANCHO_MAX_PX / img.width)
+                img = img.resize((IMG_ANCHO_MAX_PX, nuevo_alto), Image.LANCZOS)
+
+            img.save(ruta_opt, "JPEG", quality=IMG_CALIDAD_JPEG, optimize=True)
+
+        peso_orig_kb = ruta_original.stat().st_size / 1024
+        peso_opt_kb  = ruta_opt.stat().st_size / 1024
+        print(f"[WUG][MAIL] Optimizado {ruta_original.name}: "
+              f"{peso_orig_kb:.1f}KB → {peso_opt_kb:.1f}KB")
+
+        return ruta_opt
+
+    except Exception as e:
+        print(f"[WUG][MAIL] Warning: falló optimización de {ruta_original.name}: "
+              f"{type(e).__name__}: {e}. Se usa el original.")
+        return ruta_original
 
 
 def _enviar_reporte_mail(evidencias: dict, destinatarios: list, preview: bool = False) -> bool:
@@ -341,9 +480,9 @@ def _enviar_reporte_mail(evidencias: dict, destinatarios: list, preview: bool = 
 
     - Usa el cliente Outlook desktop ya autenticado localmente (la ruta confiable
       para Pecom, ya que O365 SMTP Basic Auth está deshabilitado a nivel tenant).
-    - Cada imagen se adjunta y se le asigna un CID vía PR_ATTACH_CONTENT_ID,
-      para poder referenciarla con <img src="cid:..."> y que quede embebida
-      en el cuerpo (no como attachment al final).
+    - Cada imagen se optimiza (redimensiona + JPEG) para no reventar el límite
+      de 102KB de Gmail, y después se adjunta con CID vía PR_ATTACH_CONTENT_ID
+      para poder referenciarla con <img src="cid:..."> embebida en el cuerpo.
 
     Args:
         evidencias:    dict {titulo_widget: {"path": Path, "resumen_html": str}}.
@@ -375,12 +514,18 @@ def _enviar_reporte_mail(evidencias: dict, destinatarios: list, preview: bool = 
         mail.Subject = f"{ASUNTO_MAIL} - {datetime.now().strftime('%d/%m/%Y')}"
 
         html_secciones = []
+        peso_total_kb = 0.0
+
         for i, (titulo, info) in enumerate(evidencias.items()):
-            ruta = info["path"]
+            ruta = Path(info["path"])
             resumen = info.get("resumen_html", "")
 
+            # Optimizar antes de adjuntar (evita el clipping de Gmail).
+            ruta_para_mail = _optimizar_imagen_para_mail(ruta)
+            peso_total_kb += ruta_para_mail.stat().st_size / 1024
+
             cid = f"widget_{i}"
-            attachment = mail.Attachments.Add(str(Path(ruta).resolve()))
+            attachment = mail.Attachments.Add(str(ruta_para_mail.resolve()))
             # Marcar la imagen como inline con su CID
             attachment.PropertyAccessor.SetProperty(PR_ATTACH_CONTENT_ID, cid)
 
@@ -392,6 +537,17 @@ def _enviar_reporte_mail(evidencias: dict, destinatarios: list, preview: bool = 
                 f'color:#333;margin:8px 0 12px 0;">{resumen}</p>'
                 f'<img src="cid:{cid}" style="max-width:100%;border:1px solid #ddd;">'
             )
+
+        # Base64 agrega ~33% de overhead al peso real de los archivos.
+        # Si el peso proyectado del body supera 90KB, avisamos para poder
+        # ajustar IMG_ANCHO_MAX_PX o IMG_CALIDAD_JPEG a la baja.
+        peso_body_estimado_kb = peso_total_kb * 1.33
+        print(f"[WUG][MAIL] Peso total imágenes: {peso_total_kb:.1f}KB "
+              f"(≈{peso_body_estimado_kb:.1f}KB en base64 dentro del mail)")
+        if peso_body_estimado_kb > 90:
+            print("[WUG][MAIL] ⚠  El peso proyectado se acerca al límite de "
+                  "Gmail (102KB). Considerá bajar IMG_ANCHO_MAX_PX o "
+                  "IMG_CALIDAD_JPEG en la configuración.")
 
         mail.HTMLBody = f"""
         <html>
@@ -427,11 +583,16 @@ def _enviar_reporte_mail(evidencias: dict, destinatarios: list, preview: bool = 
 #                       FUNCIÓN PRINCIPAL
 # ============================================================
 
-def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None) -> bool:
+def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None,
+                       headless: bool = False) -> bool:
     """
     Recorre los dashboards configurados, guarda una screenshot recortada
     de cada widget y (opcionalmente) envía un mail HTML con las evidencias
     embebidas inline.
+
+    Si un dashboard contiene varios widgets (ej. Disk + Memory en viewId=863),
+    solo se carga la URL una vez y después se capturan todos los widgets
+    aprovechando la misma sesión de ExtJS.
 
     Args:
         enviar_mail:  True dispara el envío al terminar. False lo omite
@@ -439,12 +600,19 @@ def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None) -> bo
                       el reporte se manda consolidado desde ahí).
         preview_mail: True/False fuerza el modo preview. None respeta
                       MODO_PREVIEW_MAIL configurado arriba.
+        headless:     True = sin ventana visible. Requiere que la sesión ya
+                      esté guardada en PROFILE_DIR (si Netskope/SSO piden
+                      login, headless no lo puede completar solo). Pensado
+                      para el refresco automático de programador_reporte.py;
+                      todavía sin validar en producción — si en headless
+                      empieza a devolver FALLA sistemáticamente, hay que
+                      volver a False.
     """
     EVIDENCIAS_DIR.mkdir(exist_ok=True)
     ts = _timestamp()
 
     ok_global = True
-    evidencias_capturadas = {}   # {titulo: Path} → se pasa al mail al final
+    evidencias_capturadas = {}   # {titulo: {...}} → se pasa al mail al final
 
     print("=" * 60)
     print("[WUG] Iniciando verificación de WhatsUp Gold")
@@ -454,7 +622,7 @@ def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None) -> bo
         contexto = p.chromium.launch_persistent_context(
             user_data_dir=str(PROFILE_DIR),
             channel="msedge",
-            headless=False,
+            headless=headless,
             viewport={"width": 1600, "height": 900},
         )
 
@@ -462,11 +630,13 @@ def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None) -> bo
 
         try:
             for dash in DASHBOARDS:
-                nombre = dash["nombre"]
-                titulo = dash["titulo"]
                 url = dash["url"]
+                widgets = dash["widgets"]
 
-                print(f"\n[WUG] Abriendo dashboard: {titulo}")
+                # Descriptivo para el log: nombres de los widgets que vamos a levantar
+                titulos_widgets = ", ".join(w["titulo"] for w in widgets)
+                print(f"\n[WUG] Abriendo dashboard con: {titulos_widgets}")
+
                 try:
                     page.goto(url, wait_until="domcontentloaded",
                               timeout=TIMEOUT_NAVEGACION_MS)
@@ -484,27 +654,52 @@ def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None) -> bo
                             ok_global = False
                             continue
 
-                    ruta_evidencia = EVIDENCIAS_DIR / f"{nombre}_{ts}.png"
-                    panel = _capturar_panel(page, titulo, ruta_evidencia)
-                    print(f"[WUG] OK - Evidencia guardada: {ruta_evidencia.name}")
-
-                    # Extraemos los datos del grid para armar un resumen en el mail
-                    filas = _extraer_filas_grid(panel)
-                    resumen_html = _generar_resumen_widget(nombre, filas)
-                    print(f"[WUG] Resumen ({len(filas)} filas): "
-                          f"{resumen_html.replace('<b>','').replace('</b>','').replace('<i>','').replace('</i>','')}")
-
-                    evidencias_capturadas[titulo] = {
-                        "path": ruta_evidencia,
-                        "resumen_html": resumen_html,
-                    }
-
                 except PlaywrightTimeout as e:
-                    print(f"[WUG] TIMEOUT en '{titulo}': {e}")
+                    print(f"[WUG] TIMEOUT cargando dashboard: {e}")
                     ok_global = False
+                    continue
                 except Exception as e:
-                    print(f"[WUG] ERROR en '{titulo}': {type(e).__name__}: {e}")
+                    print(f"[WUG] ERROR cargando dashboard: {type(e).__name__}: {e}")
                     ok_global = False
+                    continue
+
+                # Dashboard cargado y logueado: ahora capturamos cada widget.
+                # Si uno falla, seguimos con el siguiente (no cortamos toda la corrida).
+                for widget in widgets:
+                    nombre = widget["nombre"]
+                    titulo = widget["titulo"]
+
+                    ruta_evidencia = EVIDENCIAS_DIR / f"{nombre}_{ts}.png"
+
+                    try:
+                        panel = _capturar_panel(page, titulo, ruta_evidencia)
+                        print(f"[WUG] OK - Evidencia guardada: {ruta_evidencia.name}")
+
+                        # Extraemos los datos del grid para armar un resumen en el mail
+                        filas = _extraer_filas_grid(panel)
+                        resumen_html, criticos_count, items_criticos = _generar_resumen_widget(nombre, filas)
+                        resumen_plain = (
+                            resumen_html
+                            .replace('<b>', '').replace('</b>', '')
+                            .replace('<i>', '').replace('</i>', '')
+                        )
+                        print(f"[WUG] Resumen '{titulo}' ({len(filas)} filas): "
+                              f"{resumen_plain}")
+
+                        evidencias_capturadas[titulo] = {
+                            "path": ruta_evidencia,
+                            "resumen_html": resumen_html,
+                            "criticos": criticos_count,
+                            "items_criticos": items_criticos,
+                        }
+
+                    except PlaywrightTimeout as e:
+                        print(f"[WUG] TIMEOUT en widget '{titulo}': {e}")
+                        ok_global = False
+                    except Exception as e:
+                        print(f"[WUG] ERROR en widget '{titulo}': "
+                              f"{type(e).__name__}: {e}")
+                        ok_global = False
 
         finally:
             contexto.close()

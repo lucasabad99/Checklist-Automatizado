@@ -30,9 +30,23 @@ desbloqueada, y si algún paso pide "presioná Enter", lo pide en la terminal.
 """
 
 import os
+import sys
 import json
 import time
+import socket
+import threading
 from pathlib import Path
+from datetime import datetime
+
+# Windows a veces arranca este proceso con la consola/salida en un codepage
+# que no soporta ✓/✗/→ ni tildes (típico si se redirige la salida a un
+# archivo o se lanza sin una consola UTF-8). Forzamos UTF-8 acá para que
+# ningún print() de los módulos que importamos pueda tirar abajo una corrida.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 from flask import Flask, Response, send_file, jsonify, request, abort
 
@@ -47,6 +61,193 @@ import check_whatsupgold as wug
 app = Flask(__name__)
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+#  Tablero de TV — estado en vivo para consumo remoto (ver tablero.py)
+# ══════════════════════════════════════════════════════════════════════════════
+# Certificados SSL es el único check 100% headless (sockets puros, sin
+# navegador ni automatización de escritorio), así que es el único que se
+# re-ejecuta solo en segundo plano. El resto de los pasos (3CX, Citrix, SAP,
+# Portales SSO, Humand, WhatsUp Gold) requieren pantalla/mouse visibles o
+# abren una ventana real de Edge, así que el tablero solo muestra el
+# resultado de la última corrida MANUAL del checklist completo.
+
+CERTS_REFRESH_SEGUNDOS = 15 * 60   # cada cuánto se refrescan solos los certificados
+ESTADO_JSON_PATH = Path("estado_actual.json")
+
+_estado_certs = {"timestamp": None, "ok": None, "detalle": "", "items": []}
+_estado_certs_lock = threading.Lock()
+_ultima_corrida_ts = None   # datetime de la última corrida MANUAL completa
+
+
+def _refrescar_certificados():
+    """Vuelve a chequear los certificados SSL y actualiza _estado_certs.
+    Aislado de cl._resultados a propósito: no debe pisar ni interferir con
+    una corrida manual del checklist completo que esté en curso."""
+    from check_certificados import check_certificado, URLS
+
+    items, vencidos, alertas, errores = [], [], [], []
+    for url in URLS:
+        r = check_certificado(url)
+        items.append(r)
+        if not r["ok"]:
+            errores.append(r["host"])
+        elif r.get("vencido"):
+            vencidos.append(r["host"])
+        elif r.get("alerta"):
+            alertas.append(r["host"])
+
+    if vencidos:
+        ok, detalle = False, f"VENCIDOS: {', '.join(vencidos)}"
+    elif errores:
+        ok, detalle = False, f"Sin acceso: {', '.join(errores)}"
+    elif alertas:
+        ok, detalle = True, f"Por vencer pronto: {', '.join(alertas)}"
+    else:
+        ok, detalle = True, f"{len(URLS)} certificados válidos"
+
+    with _estado_certs_lock:
+        _estado_certs.update({
+            "timestamp": datetime.now().isoformat(timespec="seconds"),
+            "ok": ok,
+            "detalle": detalle,
+            "items": items,
+        })
+    _persistir_estado()
+    print(f"[TABLERO] Certificados SSL actualizados automáticamente — {detalle}")
+
+
+def _certs_loop():
+    while True:
+        try:
+            _refrescar_certificados()
+        except Exception as e:
+            print(f"[TABLERO] Error refrescando certificados: {type(e).__name__}: {e}")
+        time.sleep(CERTS_REFRESH_SEGUNDOS)
+
+
+def _construir_estado_dict() -> dict:
+    """Arma el JSON que consume tablero.py: los resultados de la última
+    corrida manual, con el item de Certificados SSL siempre reemplazado por
+    la versión más fresca (auto-refrescada en segundo plano)."""
+    with _estado_certs_lock:
+        certs = dict(_estado_certs)
+
+    items = []
+    vistos_certs = False
+    for r in cl._resultados:
+        if r["nombre"] == "Certificados SSL":
+            vistos_certs = True
+            items.append({
+                "nombre": "Certificados SSL",
+                "ok": certs.get("ok"),
+                "detalle": certs.get("detalle", ""),
+                "items": certs.get("items", []),
+                "auto": True,
+                "timestamp": certs.get("timestamp"),
+            })
+        else:
+            items.append({
+                "nombre": r["nombre"],
+                "ok": r["ok"],
+                "detalle": r.get("detalle", ""),
+                "auto": False,
+            })
+
+    # Si todavía no corrió el checklist completo pero ya hay certificados
+    # auto-refrescados, los mostramos igual (mejor que un tablero vacío).
+    if not vistos_certs and certs.get("timestamp"):
+        items.insert(0, {
+            "nombre": "Certificados SSL",
+            "ok": certs.get("ok"),
+            "detalle": certs.get("detalle", ""),
+            "items": certs.get("items", []),
+            "auto": True,
+            "timestamp": certs.get("timestamp"),
+        })
+
+    ok_n = sum(1 for i in items if i["ok"])
+    fail_n = len(items) - ok_n
+
+    return {
+        "generado": datetime.now().isoformat(timespec="seconds"),
+        "ultima_corrida_manual": _ultima_corrida_ts.isoformat(timespec="seconds") if _ultima_corrida_ts else None,
+        "ok": ok_n,
+        "fail": fail_n,
+        "total": len(items),
+        "items": items,
+    }
+
+
+def _persistir_estado():
+    try:
+        ESTADO_JSON_PATH.write_text(
+            json.dumps(_construir_estado_dict(), ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+    except Exception as e:
+        print(f"[TABLERO] Error persistiendo estado: {type(e).__name__}: {e}")
+
+
+def _cargar_estado_inicial():
+    """Restaura el último estado conocido al arrancar dashboard.py, para que
+    un reinicio del proceso no deje el tablero en blanco hasta la próxima
+    corrida manual."""
+    if not ESTADO_JSON_PATH.exists():
+        return
+    try:
+        data = json.loads(ESTADO_JSON_PATH.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"[TABLERO] No se pudo leer estado previo: {type(e).__name__}: {e}")
+        return
+
+    global _ultima_corrida_ts
+    ts = data.get("ultima_corrida_manual")
+    if ts:
+        try:
+            _ultima_corrida_ts = datetime.fromisoformat(ts)
+        except ValueError:
+            pass
+
+    cl._resultados.clear()
+    for it in data.get("items", []):
+        cl._resultados.append({
+            "nombre": it["nombre"],
+            "ok": it["ok"],
+            "detalle": it.get("detalle", ""),
+            "items": it.get("items", []) if it.get("nombre") == "Certificados SSL" else [],
+        })
+        if it.get("nombre") == "Certificados SSL" and it.get("auto"):
+            with _estado_certs_lock:
+                _estado_certs.update({
+                    "timestamp": it.get("timestamp"),
+                    "ok": it.get("ok"),
+                    "detalle": it.get("detalle", ""),
+                    "items": it.get("items", []),
+                })
+    print(f"[TABLERO] Estado previo restaurado ({len(cl._resultados)} items, "
+          f"última corrida manual: {ts or 'nunca'})")
+
+
+def _ip_local() -> str:
+    """Mejor esfuerzo para mostrar la IP LAN de esta PC (la que hay que
+    poner en EJECUTOR_URL dentro de tablero.py)."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"
+    finally:
+        s.close()
+
+
+@app.route("/estado.json")
+def estado_json():
+    resp = jsonify(_construir_estado_dict())
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    return resp
+
+
 # ── Wrapper del módulo WhatsUp Gold para integrarlo al dashboard ──────────────
 # Traduce la firma bool → resultado registrado en cl._resultados, igual que
 # los otros pasos. Ejecutado desde el dashboard, el módulo también manda su
@@ -55,7 +256,10 @@ app = Flask(__name__)
 def paso_whatsupgold():
     nombre = "WhatsUp Gold — Down Monitors + Disk Utilization"
     try:
-        ok = wug.check_whatsupgold()
+        # enviar_mail=False: el mail de WUG NO se manda por separado acá.
+        # Las evidencias se inyectan en el reporte consolidado y se envían
+        # juntas cuando se aprieta "Enviar por email" (ver email_send()).
+        ok = wug.check_whatsupgold(enviar_mail=False)
         detalle = (
             "Evidencias capturadas y reporte enviado por Outlook"
             if ok else
@@ -131,6 +335,11 @@ def _run_stream():
 
     ok_n = sum(1 for r in cl._resultados if r["ok"])
     fail_n = len(cl._resultados) - ok_n
+
+    global _ultima_corrida_ts
+    _ultima_corrida_ts = datetime.now()
+    _persistir_estado()
+
     yield _sse("done", {
         "ok": ok_n,
         "fail": fail_n,
@@ -222,25 +431,24 @@ def _inyectar_widgets_wug_html(html_base: str, image_src_resolver) -> str:
         '</div>'
     )
 
-    # 1) Antes del <hr> (línea horizontal típica entre pasos y "Saludos")
-    m = _re.search(r"<hr\b[^>]*/?>", html_base, _re.IGNORECASE)
-    if m:
-        idx = m.start()
-        return html_base[:idx] + seccion_envuelta + "\n" + html_base[idx:]
-
-    # 2) Antes del tag de apertura que contiene "Saludos"
+    # 1) Antes del tag de apertura que contiene "Saludos"
     #    (ej: <p>Saludos,</p> → inyecta antes de <p>)
+    # NOTA: no usamos el primer <hr> del documento como marcador porque cada
+    # sección del detalle (SSL, 3CX, Citrix, ...) tiene su propio <hr> debajo
+    # del título (ver _seccion_header en checklist.py) — buscar "el primer
+    # <hr>" siempre caía dentro de la primera sección (Certificados SSL) en
+    # vez de antes de la firma.
     m = _re.search(r"<(p|div|td|tr|table|section)[^>]*>\s*Saludos", html_base, _re.IGNORECASE)
     if m:
         idx = m.start()
         return html_base[:idx] + seccion_envuelta + "\n" + html_base[idx:]
 
-    # 3) Antes de la palabra "Saludos" (fallback text-only)
+    # 2) Antes de la palabra "Saludos" (fallback text-only)
     idx = html_base.find("Saludos")
     if idx != -1:
         return html_base[:idx] + seccion_envuelta + "\n" + html_base[idx:]
 
-    # 4) Antes de </body> o </html>
+    # 3) Antes de </body> o </html>
     for marker in ("</body>", "</html>"):
         idx = html_base.lower().find(marker.lower())
         if idx != -1:
@@ -248,7 +456,7 @@ def _inyectar_widgets_wug_html(html_base: str, image_src_resolver) -> str:
                   "porque no se encontró 'Saludos' ni <hr> en el HTML consolidado.")
             return html_base[:idx] + seccion_envuelta + "\n" + html_base[idx:]
 
-    # 5) Último recurso: pegar al final
+    # 4) Último recurso: pegar al final
     print("[DASHBOARD] Advertencia: no se encontró un marcador de inyección; "
           "sección de WhatsUp Gold se agregó al final del HTML.")
     return html_base + "\n" + seccion_envuelta
@@ -321,6 +529,12 @@ def email_preview():
 
 @app.route("/email/send", methods=["POST"])
 def email_send():
+    import pythoncom
+    # Flask corre cada request en un hilo nuevo (threaded=True) y COM exige
+    # CoInitialize() en CADA hilo antes de tocar Outlook.Application; sin esto
+    # win32com tira "CoInitialize no ha sido llamado" (CO_E_NOTINITIALIZED)
+    # justo al armar el mail.
+    pythoncom.CoInitialize()
     try:
         ultima = wug.obtener_ultima_corrida()
         if ultima.get("evidencias"):
@@ -332,6 +546,8 @@ def email_send():
         return jsonify({"ok": True, "to": cl.MAIL_DESTINATARIO})
     except Exception as e:
         return jsonify({"ok": False, "error": f"{type(e).__name__}: {e}"})
+    finally:
+        pythoncom.CoUninitialize()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -673,10 +889,16 @@ function toast(msg, kind){
 
 
 if __name__ == "__main__":
+    _cargar_estado_inicial()
+    threading.Thread(target=_certs_loop, daemon=True).start()
+
+    ip = _ip_local()
     print("\n" + "=" * 60)
     print("  Dashboard Checklist Pecom corriendo en:  http://127.0.0.1:5000")
+    print(f"  Estado en vivo para el tablero de TV:    http://{ip}:5000/estado.json")
+    print("  (usá esa IP como EJECUTOR_URL en tablero.py)")
     print("  (Ctrl+C para detener)")
     print("=" * 60 + "\n")
     # threaded=True para que el SSE no bloquee el resto de las rutas.
     # use_reloader=False para no importar checklist.py dos veces.
-    app.run(host="127.0.0.1", port=5000, threaded=True, use_reloader=False, debug=False)
+    app.run(host="0.0.0.0", port=5000, threaded=True, use_reloader=False, debug=False)
