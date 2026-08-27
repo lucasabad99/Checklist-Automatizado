@@ -35,7 +35,7 @@ import pygetwindow as gw
 
 # ============ CONFIGURACIÓN ============
 SITIO_NOMBRE   = "3CX"
-NUMERO_DESTINO = "91555838452"   # 9 = prefijo salida externa + celular
+NUMERO_DESTINO = "91560180795"   # 9 = prefijo salida externa + celular
 
 # Ruta al ejecutable de 3CX Phone
 PATH_3CX = r"C:\Program Files (x86)\3CXPhone\3CXPhone.exe"

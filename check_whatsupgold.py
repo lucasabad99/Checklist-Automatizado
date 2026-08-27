@@ -13,6 +13,10 @@ Enfoque:
     - Playwright con perfil persistente de Microsoft Edge (Netskope + sesión SSO/WUG).
     - Primer uso: se abre Edge y hay que loguearse manualmente una vez.
     - Corridas siguientes: reutiliza la sesión guardada en 'perfil_wug/'.
+    - Login de WUG (usuario/clave propios de la app, no el SSO/Netskope):
+      si se configuran WUG_USER / WUG_PASS en .env, se autocompleta solo
+      cuando aparece la pantalla de login. Sin esas variables, sigue
+      pidiendo login manual como siempre (ver _intentar_login_wug).
     - Los IDs 'reportpanel-XXXX' de ExtJS son dinámicos, por eso ubicamos los
       widgets por el texto del título (estable) y subimos al ancestro
       'reportpanel-*' con XPath.
@@ -27,11 +31,15 @@ Retorna:
     - False si algún widget falló o hubo timeout / login pendiente.
 """
 
+import os
 from pathlib import Path
 from datetime import datetime
 import re
 import unicodedata
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # ============================================================
@@ -41,6 +49,15 @@ from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 BASE_DIR = Path(__file__).parent.resolve()
 PROFILE_DIR = BASE_DIR / "perfil_wug"
 EVIDENCIAS_DIR = BASE_DIR / "evidencias_whatsupgold"
+
+# Login de WhatsUp Gold (no es el SSO/Netskope, que ya viaja con la cookie de
+# sesión del perfil de Edge — esto es el usuario/clave propios de WUG que hoy
+# se tipean a mano cada vez que se abre). Opcional: si no están seteados en
+# .env, se mantiene el comportamiento de siempre (esperar login manual).
+#   WUG_USER=tu_usuario
+#   WUG_PASS=tu_clave
+WUG_USER = os.getenv("WUG_USER")
+WUG_PASS = os.getenv("WUG_PASS")
 
 # Dashboards a recorrer. Cada dashboard puede tener uno o más widgets;
 # la URL se carga UNA sola vez por dashboard y después se capturan
@@ -194,6 +211,50 @@ def _detectar_login(page) -> bool:
             "input[name='sUsername'], form[name='login']"
         ).count() > 0
     except Exception:
+        return False
+
+
+def _intentar_login_wug(page) -> bool:
+    """
+    Completa usuario/clave en el formulario de login de WUG y confirma.
+    Devuelve True si el login se completó (ya no se detecta la pantalla de
+    login), False si no se pudo (credenciales no configuradas, selector no
+    encontrado, o el login falló).
+
+    OJO: los selectores de campo/botón son la mejor estimación a partir del
+    formulario clásico de WUG (input#Username / input#Password) — todavía no
+    se validó contra el login real en producción. Si no matchean, revisar con
+    el DevTools del navegador (F12 → inspeccionar el campo) y ajustar acá.
+    """
+    if not WUG_USER or not WUG_PASS:
+        return False
+
+    try:
+        campo_usuario = page.locator(
+            "input[name='Username'], input#Username, input[name='sUsername']"
+        ).first
+        campo_clave = page.locator(
+            "input[name='Password'], input#Password, input[name='sPassword'], "
+            "input[type='password']"
+        ).first
+
+        campo_usuario.fill(WUG_USER)
+        campo_clave.fill(WUG_PASS)
+
+        boton_login = page.locator(
+            "button[type='submit'], input[type='submit'], "
+            "button:has-text('Log'), button:has-text('Ingresar')"
+        ).first
+        if boton_login.count() > 0:
+            boton_login.click()
+        else:
+            campo_clave.press("Enter")
+
+        page.wait_for_timeout(4_000)
+        return not _detectar_login(page)
+
+    except Exception as e:
+        print(f"[WUG] No se pudo autocompletar el login: {type(e).__name__}: {e}")
         return False
 
 
@@ -644,12 +705,30 @@ def check_whatsupgold(enviar_mail: bool = True, preview_mail: bool = None,
                     page.wait_for_timeout(ESPERA_RENDER_MS)
 
                     if _detectar_login(page):
-                        print("[WUG] ATENCIÓN: apareció pantalla de login de WhatsUp Gold.")
-                        print("[WUG] Logueate manualmente en la ventana de Edge que se abrió.")
-                        print("[WUG] La sesión queda guardada en el perfil para próximas corridas.")
-                        # Damos tiempo para que loguee manualmente si está mirando
-                        page.wait_for_timeout(30_000)
-                        # Reintento después del login manual
+                        print("[WUG] Apareció pantalla de login de WhatsUp Gold.")
+
+                        if WUG_USER and WUG_PASS:
+                            print("[WUG] Completando usuario/clave automáticamente (WUG_USER/WUG_PASS)...")
+                            logueado = _intentar_login_wug(page)
+                            if logueado:
+                                print("[WUG] Login automático OK.")
+                                # Recargamos el dashboard: el login pudo haber
+                                # redirigido a una página distinta a la del widget.
+                                page.goto(url, wait_until="domcontentloaded",
+                                          timeout=TIMEOUT_NAVEGACION_MS)
+                                page.wait_for_timeout(ESPERA_RENDER_MS)
+                            else:
+                                print("[WUG] El login automático no funcionó — revisar "
+                                      "WUG_USER/WUG_PASS en .env o los selectores del "
+                                      "formulario (ver _intentar_login_wug).")
+                        else:
+                            print("[WUG] Logueate manualmente en la ventana de Edge que se abrió "
+                                  "(o configurá WUG_USER/WUG_PASS en .env para que sea automático).")
+                            print("[WUG] La sesión queda guardada en el perfil para próximas corridas.")
+                            # Damos tiempo para que loguee manualmente si está mirando
+                            page.wait_for_timeout(30_000)
+
+                        # Reintento final después del login (automático o manual)
                         if _detectar_login(page):
                             ok_global = False
                             continue

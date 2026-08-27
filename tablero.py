@@ -322,14 +322,10 @@ function render(data){
   $("#bannerT").textContent = claseBanner === "ok" ? "TODAS LAS VERIFICACIONES OK"
     : claseBanner === "warn" ? "REPORTE CON ALERTAS PARCIALES"
     : `${fail} VERIFICACIÓN(ES) CON FALLO`;
-  $("#bannerS").textContent = data.ultima_corrida_manual
-    ? `Última corrida manual completa: ${haceCuanto(data.ultima_corrida_manual)}`
-    : "Todavía no se generó el reporte diario manualmente.";
+  $("#bannerS").textContent = data.ultima_actualizacion
+    ? `Última actualización: ${haceCuanto(data.ultima_actualizacion)}`
+    : "Todavía no se generó ningún reporte.";
   $("#bannerBig").textContent = `${ok}/${total}`;
-
-  // Los items del reporte diario no traen timestamp propio (solo los "auto"
-  // del checklist viejo lo tenían) — usamos el de la última corrida global.
-  const tsManualTxt = data.ultima_corrida_manual ? haceCuanto(data.ultima_corrida_manual) : "sin corridas";
 
   const grid = $("#grid");
   grid.innerHTML = "";
@@ -340,11 +336,16 @@ function render(data){
     const icono = iconoPara(it.nombre);
     const card = document.createElement("div");
     card.className = "card " + estado;
+    // Cada tarjeta muestra SU PROPIA hora real de actualización (it.timestamp),
+    // no un timestamp global — WhatsUp Gold, URLs y Email/3CX se refrescan en
+    // momentos distintos con el programador automático, así que mostrar una
+    // sola hora para todas sería engañoso (ver check_reporte_diario.py,
+    // ts_wug / ts_urls / ts_email_3cx).
     const foot = it.informativo
       ? `${svg("info")}<span class="foot-info">Informativo</span>&nbsp;· sin chequeo automatizado`
-      : it.auto
+      : it.auto  // compatibilidad con items "estilo checklist viejo" (dashboard.py)
         ? `${svg("clock")}<span class="foot-auto">Auto</span>&nbsp;· ${haceCuanto(it.timestamp)}`
-        : `${svg("clock")}<span class="foot-manual">Manual</span>&nbsp;· ${tsManualTxt}`;
+        : `${svg("clock")}Actualizado ${it.timestamp ? haceCuanto(it.timestamp) : "— sin datos"}`;
 
     // Si el item trae desglose (ej. WhatsUp Gold por widget, o los problemas
     // de URLs Corporativas), lo mostramos como una mini-lista clara en vez

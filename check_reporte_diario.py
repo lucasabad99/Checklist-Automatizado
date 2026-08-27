@@ -869,32 +869,6 @@ def _armar_html_consolidado(
             </h2>
             {seccion_otros}
 
-            <!-- Notas -->
-            <div style="margin-top:28px;padding:14px 16px;background:#f9fafb;
-                        border-radius:6px;font-size:12px;color:{COLOR_MUTED};
-                        line-height:1.6;">
-                <div><strong>Notas:</strong></div>
-                <div>- Codigos HTTP 401/403 se consideran OK: la pagina responde
-                     pero requiere login.</div>
-                <div>- "[CA interna]" indica que el certificado es de la CA interna
-                     de Pecom (no verificable contra el trust store publico, pero
-                     valido en el ambiente corporativo).</div>
-                <div>- URLs marcadas como IGNORADO tienen fallas conocidas que no
-                     afectan el resultado global; el certificado se chequea igual.</div>
-                <div>- El envío a Helpdesk es un mail de prueba para validar la
-                     ruta Outlook → tickets@pecomenergia.com.ar; no genera ticket real.</div>
-                <div>- Las capturas de WhatsUp Gold se toman en tiempo real desde
-                     los dashboards viewId=859 (Down Monitors) y viewId=863
-                     (Disk + Memory Utilization).</div>
-                <div>- La verificación de 3CX origina una llamada saliente real de
-                     prueba desde 3CX Phone; requiere la app abierta y logueada.</div>
-                <div>- Las secciones "Accesos Remotos y Chequeo HES" (VPN Forti,
-                     Citrix, e-mails HES) y "Otros Sistemas" (Cobranzas.com,
-                     Portal Office, Microsoft Teams) son informativas: no tienen
-                     chequeo automatizado detrás, se deja constancia siempre
-                     como OK.</div>
-            </div>
-
         </div>
 
         <!-- Footer -->
@@ -1013,6 +987,15 @@ _ultima_corrida_reporte = {
     "evidencias_wug": {},
     "estado_global": None,
     "asunto": None,
+    # Timestamp REAL de la última vez que cada sección se actualizó de
+    # verdad (no el timestamp global del blob) — necesario porque con el
+    # programador automático, WhatsUp Gold, URLs y Email/3CX se refrescan en
+    # momentos distintos, no todos juntos. Sin esto, el tablero mostraba
+    # "hace 17 min" en WhatsUp Gold aunque ese dato fuera de la corrida
+    # diaria de la mañana, solo porque URLs se había actualizado hace 17 min.
+    "ts_wug": None,
+    "ts_urls": None,
+    "ts_email_3cx": None,
 }
 
 
@@ -1020,6 +1003,44 @@ def obtener_ultima_corrida_reporte() -> dict:
     """Devuelve una copia superficial del último reporte armado (o vacío si
     todavía no se corrió nada en esta sesión)."""
     return dict(_ultima_corrida_reporte)
+
+
+def _serializar_resultados_urls(resultados_urls: list[dict]) -> list[dict]:
+    """resultados_urls trae cert['fecha_vencimiento'] como datetime real —
+    no es serializable por json.dumps tal cual. Lo pasamos a isoformat()."""
+    out = []
+    for r in resultados_urls:
+        r2 = dict(r)
+        cert = dict(r2.get("cert") or {})
+        fv = cert.get("fecha_vencimiento")
+        if isinstance(fv, datetime):
+            cert["fecha_vencimiento"] = fv.isoformat()
+        r2["cert"] = cert
+        out.append(r2)
+    return out
+
+
+def _deserializar_resultados_urls(resultados_urls: list[dict]) -> list[dict]:
+    """Inverso de _serializar_resultados_urls: reconstruye el datetime para
+    que _armar_html_consolidado (vía _fecha_es) siga funcionando igual."""
+    out = []
+    for r in resultados_urls:
+        r2 = dict(r)
+        cert = dict(r2.get("cert") or {})
+        fv = cert.get("fecha_vencimiento")
+        if isinstance(fv, str):
+            cert["fecha_vencimiento"] = datetime.fromisoformat(fv)
+        r2["cert"] = cert
+        out.append(r2)
+    return out
+
+
+def _ts_iso(ts: datetime | None) -> str | None:
+    return ts.isoformat() if ts else None
+
+
+def _ts_from_iso(ts: str | None) -> datetime | None:
+    return datetime.fromisoformat(ts) if ts else None
 
 
 def _persistir_estado_reporte() -> None:
@@ -1050,11 +1071,14 @@ def _persistir_estado_reporte() -> None:
             "estado_global": d.get("estado_global"),
             "asunto": d.get("asunto"),
             "evidencias_wug": evidencias_wug_json,
-            "resultados_urls": d.get("resultados_urls", []),
+            "resultados_urls": _serializar_resultados_urls(d.get("resultados_urls", [])),
             "ok_email": d.get("ok_email"),
             "info_email": info_email,
             "ok_3cx": d.get("ok_3cx"),
             "color_estado": d.get("color_estado"),
+            "ts_wug": _ts_iso(d.get("ts_wug")),
+            "ts_urls": _ts_iso(d.get("ts_urls")),
+            "ts_email_3cx": _ts_iso(d.get("ts_email_3cx")),
         }
         ESTADO_REPORTE_JSON.write_text(
             json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
@@ -1086,11 +1110,14 @@ def cargar_estado_reporte() -> None:
         "evidencias_wug": data.get("evidencias_wug", {}),
         "estado_global": data.get("estado_global"),
         "asunto": data.get("asunto"),
-        "resultados_urls": data.get("resultados_urls", []),
+        "resultados_urls": _deserializar_resultados_urls(data.get("resultados_urls", [])),
         "ok_email": data.get("ok_email", False),
         "info_email": info_email,
         "ok_3cx": data.get("ok_3cx", False),
         "color_estado": data.get("color_estado"),
+        "ts_wug": _ts_from_iso(data.get("ts_wug")),
+        "ts_urls": _ts_from_iso(data.get("ts_urls")),
+        "ts_email_3cx": _ts_from_iso(data.get("ts_email_3cx")),
     })
     _log(f"[REPORTE] Estado previo restaurado (corrida del {ts or 'desconocido'}).")
 
@@ -1148,8 +1175,9 @@ def actualizar_parcial(
         fecha_str = datetime.now().strftime("%d/%m/%Y")
         asunto = f"[Checklist IT] Reporte Diario - {estado_global} - {fecha_str}"
 
-        _ultima_corrida_reporte.update({
-            "timestamp": datetime.now(),
+        ahora = datetime.now()
+        actualizacion = {
+            "timestamp": ahora,
             "html": html,
             "evidencias_wug": evidencias_wug_final,
             "estado_global": estado_global,
@@ -1159,7 +1187,18 @@ def actualizar_parcial(
             "info_email": info_email_final,
             "ok_3cx": ok_3cx_final,
             "color_estado": color_estado,
-        })
+        }
+        # Solo la sección que realmente se pasó (no None) cuenta como
+        # "actualizada ahora" — así cada tarjeta del tablero muestra su
+        # propia hora real, no la del último ciclo que tocó cualquier cosa.
+        if evidencias_wug is not None:
+            actualizacion["ts_wug"] = ahora
+        if resultados_urls is not None:
+            actualizacion["ts_urls"] = ahora
+        if ok_email is not None or ok_3cx is not None:
+            actualizacion["ts_email_3cx"] = ahora
+
+        _ultima_corrida_reporte.update(actualizacion)
         _persistir_estado_reporte()
         return dict(_ultima_corrida_reporte)
     finally:
@@ -1284,18 +1323,22 @@ def obtener_items_tablero() -> list[dict]:
         return [{"etiqueta": f"{titulo} ({len(subitems)})", "valor": "OK", "estado": "ok"}
                 for titulo, subitems in grupos]
 
+    ts_wug = _ts_iso(d.get("ts_wug"))
+    ts_urls = _ts_iso(d.get("ts_urls"))
+    ts_email_3cx = _ts_iso(d.get("ts_email_3cx"))
+
     items = [
         {"nombre": "WhatsUp Gold — Monitoreo", "estado": estado_wug, "ok": estado_wug == "ok",
-         "detalle": det_wug, "desglose": desglose_wug},
+         "detalle": det_wug, "desglose": desglose_wug, "timestamp": ts_wug},
         {"nombre": "Email Helpdesk", "estado": "ok" if ok_email else "fail", "ok": ok_email,
-         "detalle": det_email},
+         "detalle": det_email, "timestamp": ts_email_3cx},
         {"nombre": "Accesos Remotos y Chequeo HES", "estado": "ok", "ok": True,
          "detalle": "VPN, Citrix y verificación de e-mails HES.",
          "desglose": _desglose_estatico(GRUPOS_ACCESOS_REMOTOS), "informativo": True},
         {"nombre": "URLs Corporativas", "estado": estado_urls, "ok": estado_urls == "ok",
-         "detalle": det_urls, "desglose": desglose_urls},
+         "detalle": det_urls, "desglose": desglose_urls, "timestamp": ts_urls},
         {"nombre": "Llamadas 3CX", "estado": "ok" if ok_3cx else "fail", "ok": ok_3cx,
-         "detalle": det_3cx},
+         "detalle": det_3cx, "timestamp": ts_email_3cx},
         {"nombre": "Otros Sistemas", "estado": "ok", "ok": True,
          "detalle": "Cobranzas.com, Portal Office y Microsoft Teams.",
          "desglose": _desglose_estatico(GRUPOS_OTROS_SISTEMAS), "informativo": True},
@@ -1456,8 +1499,9 @@ def _correr_reporte_diario_interno(headless: bool) -> dict:
     fecha_str = datetime.now().strftime("%d/%m/%Y")
     asunto = f"[Checklist IT] Reporte Diario - {estado_global} - {fecha_str}"
 
+    ahora = datetime.now()
     _ultima_corrida_reporte.update({
-        "timestamp": datetime.now(),
+        "timestamp": ahora,
         "html": html,
         "evidencias_wug": evidencias_wug,
         "estado_global": estado_global,
@@ -1470,6 +1514,10 @@ def _correr_reporte_diario_interno(headless: bool) -> dict:
         "info_email": info_email,
         "ok_3cx": ok_3cx,
         "color_estado": color_estado,
+        # Corrida manual completa: las 3 secciones se refrescaron ahora mismo.
+        "ts_wug": ahora,
+        "ts_urls": ahora,
+        "ts_email_3cx": ahora,
     })
     _persistir_estado_reporte()
 

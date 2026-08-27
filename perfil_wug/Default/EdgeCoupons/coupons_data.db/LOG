@@ -1,6 +1,15 @@
-2026/08/25-09:10:00.816 50b4 Reusing MANIFEST C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2026/08/25-09:10:00.821 50b4 Recovering log #166
-2026/08/25-09:10:00.824 50b4 Reusing old log C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/000166.log 
-2026/08/25-09:10:00.960 6004 Level-0 table #170: started
-2026/08/25-09:10:00.970 6004 Level-0 table #170: 683376 bytes OK
-2026/08/25-09:10:00.974 6004 Delete type=0 #166
+2026/08/27-08:35:52.884 850c Reusing MANIFEST C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/27-08:35:52.891 850c Recovering log #185
+2026/08/27-08:35:52.894 850c Reusing old log C:\MisRepositorios\Checklist-Automatizado\perfil_wug\Default\EdgeCoupons/coupons_data.db/000185.log 
+2026/08/27-08:35:53.313 4084 Level-0 table #189: started
+2026/08/27-08:35:53.323 4084 Level-0 table #189: 683376 bytes OK
+2026/08/27-08:35:53.327 4084 Delete type=0 #185
+2026/08/27-08:35:53.331 4084 Compacting 4@0 + 1@1 files
+2026/08/27-08:35:53.367 4084 Generated table #190@0: 3 keys, 683376 bytes
+2026/08/27-08:35:53.368 4084 Compacted 4@0 + 1@1 files => 683376 bytes
+2026/08/27-08:35:53.372 4084 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/08/27-08:35:53.375 4084 Delete type=2 #177
+2026/08/27-08:35:53.376 4084 Delete type=2 #180
+2026/08/27-08:35:53.376 4084 Delete type=2 #183
+2026/08/27-08:35:53.377 4084 Delete type=2 #186
+2026/08/27-08:35:53.377 4084 Delete type=2 #189

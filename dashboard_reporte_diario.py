@@ -48,13 +48,22 @@ app = Flask(__name__)
 #  CONFIGURACIÓN — editá esta sección
 # ═════════════════════════════════════════════════════════════════════════════
 
-# PRUEBA: destinatario principal es tu mail de Pecom, con un mail real de
-# Pecom en copia para probar el CC.
-# ← reemplazar por el mail de Santiago (gerente / destinatario principal) cuando se confirme
-DESTINATARIO_PRINCIPAL = "lucas.abad@pecomenergia.com"
+# Destinatario principal — Santiago (gerente). Outlook resuelve el nombre
+# contra la libreta de direcciones igual que si se tipeara a mano (ver
+# validación de destinatarios en check_reporte_diario._enviar_mail_consolidado).
+DESTINATARIO_PRINCIPAL = "Castiñeiras, Santiago Hernan"
 
-# ← lista de mails en copia (CC)
-MAIL_CC: list[str] = ["javier.manno@pecomenergia.com.ar"]
+# Copias (CC)
+MAIL_CC: list[str] = [
+    "operaciones-it@pecomenergia.com.ar",
+    "Ciberseguridad@pecomenergia.com.ar",
+    "Agustin.BrunoTouzon@pecomenergia.com.ar",
+    "USRS-ServiceDelivery@pecomenergia.com.ar",
+    "Karina.Alfonsin@pecomenergia.com.ar",
+    "Juan.Grosso@pecomenergia.com.ar",
+    "sergio.vilar@pecomenergia.com.ar",
+    "Gonzalo.Fresch@pecomenergia.com.ar",
+]
 
 # True = URLs Corporativas corre sin abrir ventanas de navegador visibles.
 HEADLESS = False
@@ -197,7 +206,10 @@ def estado_json():
 
     resp = jsonify({
         "generado": datetime.now().isoformat(timespec="seconds"),
-        "ultima_corrida_manual": ts,
+        # Nombre histórico "ultima_corrida_manual" pisado a propósito: con el
+        # programador automático esto ya no es necesariamente manual — es la
+        # última vez que CUALQUIER sección se actualizó (manual o automática).
+        "ultima_actualizacion": ts,
         "estado_global": data.get("estado_global"),
         "ok": ok_n,
         "fail": total_reales - ok_n,

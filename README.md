@@ -62,7 +62,7 @@ Estas carpetas **no se suben a git** (están en `.gitignore`) porque contienen c
 
 ### 1.5 Archivo `.env` (credenciales)
 
-Usado por los checks del **checklist completo** (Citrix, Facilities, SSO Compras) — no lo usa el Reporte Diario. No está en git. Ver [sección 6](#6-instalación-desde-cero-para-un-compañero--otra-pc) para el formato.
+Usado principalmente por los checks del **checklist completo** (Citrix, Facilities, SSO Compras). Opcionalmente, el Reporte Diario también lo usa para automatizar el login propio de WhatsUp Gold (`WUG_USER` / `WUG_PASS` — ver [sección 4](#4-qué-está-hardcodeado-y-dónde-tocarlo)). No está en git. Ver [sección 6](#6-instalación-desde-cero-para-un-compañero--otra-pc) para el formato.
 
 ---
 
@@ -110,13 +110,22 @@ DATOS GENERADOS (no se suben a git)
 
 El envío es **manual a propósito**: nunca se manda solo, para poder frenar si algo salió mal en la corrida.
 
-### 3.2 Tablero de TV
+### 3.2 Programador automático (`programador_reporte.py`)
+
+Corre solo, de fondo, dentro del mismo proceso de `dashboard_reporte_diario.py` (no hace falta arrancarlo aparte). Dos ciclos independientes:
+
+- **Cada 20 min** (`REFRESH_RAPIDO_SEGUNDOS`): re-chequea URLs Corporativas — sin ventana, sin efectos secundarios. WhatsUp Gold **no** entra en este ciclo por defecto (`WUG_AUTO_REFRESH = False`) porque en modo headless Netskope bloquea la sesión y devuelve todo vacío — solo se puede refrescar sin ventana visible, y en tu PC de trabajo no queremos que se abra un navegador cada 20 min. En una máquina dedicada (ver `docs/tablero_en_servidor_interno.pdf`) sí conviene poner `WUG_AUTO_REFRESH = True`.
+- **1 vez por día**, desde `HORA_DIARIA` (default `"08:00"`): corre Email Helpdesk + Llamadas 3CX — estos SÍ tienen efectos reales (mail real, llamada real), por eso no se repiten cada 20 min.
+
+El estado queda guardado en `estado_reporte_diario.json` (no se sube a git) — un reinicio del proceso no pierde lo que ya corrió hoy. Nunca choca con el botón manual: hay un lock compartido, así que si uno está corriendo, el otro espera.
+
+### 3.3 Tablero de TV
 
 1. Correr `iniciar_tablero.bat` (o `python tablero.py`) en la PC/pantalla que va a mostrar el tablero.
 2. Antes, editar `EJECUTOR_URL` en `tablero.py` con la IP de la PC donde corre `dashboard_reporte_diario.py` (se imprime en consola al arrancarlo).
 3. Abrir **http://127.0.0.1:5050** en esa pantalla, pantalla completa (F11).
 
-El tablero **no ejecuta nada por su cuenta** — solo muestra el resultado de la última corrida manual de "Generar Reporte Diario", refrescando la vista cada 30 segundos.
+El tablero en sí **no ejecuta nada** — solo lee `/estado.json` cada 30 segundos y lo muestra. Los datos que muestra vienen tanto del botón manual como del programador automático (cada tarjeta indica su propia hora real de actualización).
 
 ---
 
@@ -139,6 +148,10 @@ El tablero **no ejecuta nada por su cuenta** — solo muestra el resultado de la
 | Puerto del panel / tablero | `dashboard_reporte_diario.py` / `tablero.py` → `PUERTO` / `PUERTO_LOCAL` | 5010 / 5050 |
 | A qué servidor apunta el tablero | `tablero.py` → `EJECUTOR_URL` | Placeholder — hay que ponerlo a mano |
 | Cada cuánto se refresca la vista del tablero | `tablero.py` → `REFRESH_SEGUNDOS` | 30 segundos |
+| Cada cuánto corre el ciclo rápido (URLs, y WUG si está activado) | `programador_reporte.py` → `REFRESH_RAPIDO_SEGUNDOS` | 20 minutos |
+| Hora de la corrida diaria (Email Helpdesk + 3CX) | `programador_reporte.py` → `HORA_DIARIA` | `"08:00"` |
+| Si WhatsUp Gold entra al ciclo rápido de 20 min | `programador_reporte.py` → `WUG_AUTO_REFRESH` | `False` (headless no funciona por Netskope — ver sección 3.2) |
+| Login propio de WhatsUp Gold (opcional, automatiza lo que hoy se tipea a mano) | `.env` → `WUG_USER` / `WUG_PASS` | Sin configurar = sigue pidiendo login manual |
 
 Todos estos son variables sueltas al principio de cada archivo, comentadas — no hace falta tocar el resto del código para cambiarlas.
 
@@ -179,7 +192,7 @@ playwright install msedge
 
 ### 6.3 Credenciales (`.env`)
 
-Solo necesario para el **checklist completo** (Citrix, Facilities, SSO Compras) — el Reporte Diario no usa `.env`. Crear un archivo `.env` en la carpeta del proyecto:
+Necesario para el **checklist completo** (Citrix, Facilities, SSO Compras). Opcional para el Reporte Diario: solo si querés automatizar el login propio de WhatsUp Gold (`WUG_USER`/`WUG_PASS`) — sin eso, sigue pidiendo login manual la primera vez, como siempre. Crear un archivo `.env` en la carpeta del proyecto:
 
 ```
 CITRIX_URL=https://citrix.pecomenergia.com.ar
@@ -191,11 +204,14 @@ FACILITIES_PASS=tu_password_facilities
 
 SSO_USER=nombre.apellido@pecomenergia.com.ar
 SSO_PASS=tu_password_microsoft
+
+WUG_USER=tu_usuario_whatsupgold
+WUG_PASS=tu_password_whatsupgold
 ```
 
 ### 6.4 Primera corrida (con ventanas visibles)
 
-La primera vez, corré `python dashboard_reporte_diario.py` y apretá "Generar Reporte Diario" **con la pantalla a la vista**: si WhatsUp Gold o URLs Corporativas todavía no tienen sesión guardada, va a abrir una ventana de Edge pidiendo login — hay que loguearse a mano esa vez. Las corridas siguientes ya no piden nada (mientras la sesión no expire).
+La primera vez, corré `python dashboard_reporte_diario.py` y apretá "Generar Reporte Diario" **con la pantalla a la vista**: si WhatsUp Gold o URLs Corporativas todavía no tienen sesión guardada, va a abrir una ventana de Edge pidiendo login. Con `WUG_USER`/`WUG_PASS` configurados en `.env`, WhatsUp Gold completa el login solo; si no, hay que loguearse a mano esa vez (las corridas siguientes ya no piden nada mientras la sesión no expire).
 
 ### 6.5 Conectividad
 

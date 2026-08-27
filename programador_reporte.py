@@ -20,14 +20,15 @@ programador NO pisa el último dato bueno conocido con un "FALLA" — mejor
 mostrar en el tablero un dato viejo con su hora, que un estado falso por un
 problema pasajero.
 
-IMPORTANTE — WhatsUp Gold en modo headless (WUG_AUTO_HEADLESS): todavía no
-está validado en producción. WhatsUp Gold está detrás de Netskope, y no se
-probó si el login/sesión se sostiene sin ventana visible. Si empieza a
-devolver FALLA sistemáticamente en el ciclo automático (pero funciona bien
-al correr "Generar Reporte Diario" manual, que sigue usando headless=False),
-poné WUG_AUTO_HEADLESS = False acá abajo — en ese caso WhatsUp Gold deja de
-auto-refrescarse (igual que Email/3CX) y solo se actualiza con el botón
-manual o en la corrida diaria.
+2026-08-25 — confirmado en producción: WhatsUp Gold en modo headless NO
+funciona (Netskope bloquea la sesión sin ventana visible; los 3 widgets
+vuelven "N/D"). Por eso WUG quedó AFUERA del ciclo rápido (WUG_AUTO_REFRESH
+= False): no tiene sentido "caer" a headless=False cada 20 min, porque eso
+abriría una ventana de Edge visible cada 20 minutos — igual de disruptivo
+que lo que se quería evitar. WhatsUp Gold sigue actualizándose con el botón
+manual del panel y en la corrida diaria (con ventana visible, una sola vez
+al día). Si en el futuro se resuelve el tema de Netskope en headless, poner
+WUG_AUTO_REFRESH = True para volver a sumarlo al ciclo rápido.
 """
 
 import time
@@ -52,27 +53,30 @@ REFRESH_RAPIDO_SEGUNDOS = 20 * 60   # WhatsUp Gold + URLs Corporativas
 # coincida exacto al minuto.
 HORA_DIARIA = "08:00"
 
-# Ver nota IMPORTANTE arriba antes de tocar esto.
-WUG_AUTO_HEADLESS = True
+# Ver nota arriba. False = WUG no se toca en el ciclo rápido (ni headless
+# —no funciona— ni visible —sería una ventana cada 20 min—).
+WUG_AUTO_REFRESH = False
 URLS_AUTO_HEADLESS = True
 
 # ═════════════════════════════════════════════════════════════════════════════
 
 
 def _refrescar_rapido() -> None:
-    """WhatsUp Gold + URLs Corporativas. Sin efectos secundarios reales."""
-    evidencias_wug = None   # None = "no se pudo, no tocar el campo existente"
-    try:
-        wug_mod.check_whatsupgold(enviar_mail=False, headless=WUG_AUTO_HEADLESS)
-        ultima_wug = wug_mod.obtener_ultima_corrida()
-        capturadas = ultima_wug.get("evidencias") or {}
-        if capturadas:
-            evidencias_wug = capturadas
-        else:
-            print("[PROGRAMADOR] WhatsUp Gold no capturó nada esta vez "
-                  "(¿sesión vencida en modo headless?) — se mantiene el dato anterior.")
-    except Exception as e:
-        print(f"[PROGRAMADOR] Error refrescando WhatsUp Gold: {type(e).__name__}: {e}")
+    """WhatsUp Gold (si WUG_AUTO_REFRESH) + URLs Corporativas. Sin efectos
+    secundarios reales en ninguno de los dos."""
+    evidencias_wug = None   # None = "no tocar el campo existente"
+    if WUG_AUTO_REFRESH:
+        try:
+            wug_mod.check_whatsupgold(enviar_mail=False, headless=True)
+            ultima_wug = wug_mod.obtener_ultima_corrida()
+            capturadas = ultima_wug.get("evidencias") or {}
+            if capturadas:
+                evidencias_wug = capturadas
+            else:
+                print("[PROGRAMADOR] WhatsUp Gold no capturó nada esta vez "
+                      "(¿sesión vencida en modo headless?) — se mantiene el dato anterior.")
+        except Exception as e:
+            print(f"[PROGRAMADOR] Error refrescando WhatsUp Gold: {type(e).__name__}: {e}")
 
     resultados_urls = None
     try:
@@ -154,6 +158,7 @@ def iniciar() -> None:
     """Arranca el programador en un hilo de fondo daemon. Llamar una sola
     vez al arrancar dashboard_reporte_diario.py."""
     threading.Thread(target=_loop, daemon=True).start()
-    print(f"[PROGRAMADOR] Iniciado — WhatsUp Gold + URLs cada "
+    ciclo_rapido = "WhatsUp Gold + URLs" if WUG_AUTO_REFRESH else "URLs Corporativas (WhatsUp Gold desactivado, ver nota arriba)"
+    print(f"[PROGRAMADOR] Iniciado — {ciclo_rapido} cada "
           f"{REFRESH_RAPIDO_SEGUNDOS // 60} min · Email + 3CX una vez por día "
           f"desde las {HORA_DIARIA} hs.")
