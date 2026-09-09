@@ -31,9 +31,16 @@ al día). Si en el futuro se resuelve el tema de Netskope en headless, poner
 WUG_AUTO_REFRESH = True para volver a sumarlo al ciclo rápido.
 """
 
+import sys
 import time
 import threading
+from pathlib import Path
 from datetime import datetime, date
+
+# programador_reporte.py vive en dashboards/; los módulos de chequeo
+# individuales viven en scripts-individuales/ (carpeta hermana) — hay que
+# sumarla a sys.path antes de importarlos.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts-individuales"))
 
 import check_reporte_diario as rep
 import check_whatsupgold as wug_mod
@@ -63,30 +70,43 @@ URLS_AUTO_HEADLESS = True
 
 def _refrescar_rapido() -> None:
     """WhatsUp Gold (si WUG_AUTO_REFRESH) + URLs Corporativas. Sin efectos
-    secundarios reales en ninguno de los dos."""
-    evidencias_wug = None   # None = "no tocar el campo existente"
-    if WUG_AUTO_REFRESH:
-        try:
-            wug_mod.check_whatsupgold(enviar_mail=False, headless=True)
-            ultima_wug = wug_mod.obtener_ultima_corrida()
-            capturadas = ultima_wug.get("evidencias") or {}
-            if capturadas:
-                evidencias_wug = capturadas
-            else:
-                print("[PROGRAMADOR] WhatsUp Gold no capturó nada esta vez "
-                      "(¿sesión vencida en modo headless?) — se mantiene el dato anterior.")
-        except Exception as e:
-            print(f"[PROGRAMADOR] Error refrescando WhatsUp Gold: {type(e).__name__}: {e}")
+    secundarios reales en ninguno de los dos.
 
+    Toma el mismo lock que correr_reporte_diario() ANTES de tocar Playwright:
+    si hay una corrida manual en curso, se salta el ciclo entero en vez de
+    abrir un segundo Edge sobre el mismo perfil (eso es lo que causaba el
+    TargetClosedError: dos launch_persistent_context() sobre el mismo
+    user-data-dir al mismo tiempo)."""
+    if not rep.intentar_iniciar_corrida():
+        print("[PROGRAMADOR] Refresco rápido salteado: hay una corrida manual en curso.")
+        return
+
+    evidencias_wug = None   # None = "no tocar el campo existente"
     resultados_urls = None
     try:
-        _, urls_capturadas = urls_mod.verificar_urls_corporativas(
-            headless=URLS_AUTO_HEADLESS, enviar_mail=False
-        )
-        if urls_capturadas:
-            resultados_urls = urls_capturadas
-    except Exception as e:
-        print(f"[PROGRAMADOR] Error refrescando URLs Corporativas: {type(e).__name__}: {e}")
+        if WUG_AUTO_REFRESH:
+            try:
+                wug_mod.check_whatsupgold(enviar_mail=False, headless=True)
+                ultima_wug = wug_mod.obtener_ultima_corrida()
+                capturadas = ultima_wug.get("evidencias") or {}
+                if capturadas:
+                    evidencias_wug = capturadas
+                else:
+                    print("[PROGRAMADOR] WhatsUp Gold no capturó nada esta vez "
+                          "(¿sesión vencida en modo headless?) — se mantiene el dato anterior.")
+            except Exception as e:
+                print(f"[PROGRAMADOR] Error refrescando WhatsUp Gold: {type(e).__name__}: {e}")
+
+        try:
+            _, urls_capturadas = urls_mod.verificar_urls_corporativas(
+                headless=URLS_AUTO_HEADLESS, enviar_mail=False
+            )
+            if urls_capturadas:
+                resultados_urls = urls_capturadas
+        except Exception as e:
+            print(f"[PROGRAMADOR] Error refrescando URLs Corporativas: {type(e).__name__}: {e}")
+    finally:
+        rep.finalizar_corrida()
 
     if evidencias_wug is not None or resultados_urls is not None:
         rep.actualizar_parcial(evidencias_wug=evidencias_wug, resultados_urls=resultados_urls)
@@ -97,7 +117,14 @@ def _refrescar_rapido() -> None:
 
 
 def _correr_diario() -> None:
-    """Email Helpdesk + Llamadas 3CX. Manda un mail real y origina una llamada real."""
+    """Email Helpdesk + Llamadas 3CX. Manda un mail real y origina una llamada real.
+
+    Igual que _refrescar_rapido(): toma el lock de corrida ANTES de tocar
+    Outlook/3CX, para no chocar con una corrida manual en curso."""
+    if not rep.intentar_iniciar_corrida():
+        print("[PROGRAMADOR] Verificación diaria salteada: hay una corrida manual en curso.")
+        return
+
     print(f"[PROGRAMADOR] >>> Verificación diaria (Email + 3CX) — {datetime.now().strftime('%H:%M:%S')}")
 
     ok_email, info_email = False, {
@@ -105,16 +132,19 @@ def _correr_diario() -> None:
         "error": "Error desconocido",
     }
     try:
-        ok_email, info_email = mail_tickets_mod.enviar_mail_tickets()
-    except Exception as e:
-        print(f"[PROGRAMADOR] Error en Email Helpdesk: {type(e).__name__}: {e}")
-        info_email["error"] = f"{type(e).__name__}: {e}"
+        try:
+            ok_email, info_email = mail_tickets_mod.enviar_mail_tickets()
+        except Exception as e:
+            print(f"[PROGRAMADOR] Error en Email Helpdesk: {type(e).__name__}: {e}")
+            info_email["error"] = f"{type(e).__name__}: {e}"
 
-    ok_3cx = False
-    try:
-        ok_3cx, _ = tcx_mod.check_3cx()
-    except Exception as e:
-        print(f"[PROGRAMADOR] Error en 3CX: {type(e).__name__}: {e}")
+        ok_3cx = False
+        try:
+            ok_3cx, _ = tcx_mod.check_3cx()
+        except Exception as e:
+            print(f"[PROGRAMADOR] Error en 3CX: {type(e).__name__}: {e}")
+    finally:
+        rep.finalizar_corrida()
 
     rep.actualizar_parcial(ok_email=ok_email, info_email=info_email, ok_3cx=ok_3cx)
     print(f"[PROGRAMADOR] Verificación diaria completa — "

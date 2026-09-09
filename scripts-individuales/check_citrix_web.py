@@ -12,10 +12,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
-BASE_DIR = Path(__file__).parent
+# Este script vive en scripts-individuales/; edge/ y el screenshot de
+# descubrimiento quedan en la raíz del repo (carpeta hermana).
+BASE_DIR = Path(__file__).resolve().parent.parent
 EDGE_PROFILE_DIR = os.getenv(
     "EDGE_PROFILE_DIR",
-    str(BASE_DIR / "edge_profile")
+    str(BASE_DIR / "edge" / "edge_profile")
 )
 CITRIX_URL = "https://citrix.pecomenergia.com.ar/"
 

@@ -254,10 +254,13 @@ SEG_ESPERAR_VENTANA_RDP    = 120  # Citrix Workspace en frío puede tardar basta
 SEG_ESPERAR_VENTANA_SEC    = 30
 SEG_ESPERAR_DESKTOP_REMOTO = 45
 
-PROFILE_DIR    = Path(__file__).parent / "edge_profile_citrix"
-DESCARGAS_DIR  = Path(__file__).parent / "descargas_rdp"
+# Este script vive en scripts-individuales/; estas carpetas quedan en la raíz
+# del repo (carpeta hermana), no al lado de este archivo.
+_REPO_ROOT_CITRIX = Path(__file__).resolve().parent.parent
+PROFILE_DIR    = _REPO_ROOT_CITRIX / "edge" / "edge_profile_citrix"
+DESCARGAS_DIR  = _REPO_ROOT_CITRIX / "descargas_rdp"
 # Carpeta de evidencias DEDICADA a este check (no se mezcla con las de otros módulos)
-EVIDENCIA_DIR  = Path(__file__).parent / "evidencias_citrix"
+EVIDENCIA_DIR  = _REPO_ROOT_CITRIX / "evidencias_citrix"
 DESCARGAS_DIR.mkdir(exist_ok=True)
 EVIDENCIA_DIR.mkdir(exist_ok=True)
 # =======================================

@@ -91,8 +91,11 @@ TIMEOUT_MS           = 20_000
 TIMEOUT_DASHBOARD_MS = 20_000
 POLL_MS              = 300
 
-PROFILE_DIR   = Path(__file__).parent / "edge_profile_sso_portales"
-EVIDENCIA_DIR = Path(__file__).parent / "evidencias_sso_portales"
+# Este script vive en scripts-individuales/; estas carpetas quedan en la raíz
+# del repo (carpeta hermana), no al lado de este archivo.
+_REPO_ROOT_SSO = Path(__file__).resolve().parent.parent
+PROFILE_DIR   = _REPO_ROOT_SSO / "edge" / "edge_profile_sso_portales"
+EVIDENCIA_DIR = _REPO_ROOT_SSO / "evidencias_sso_portales"
 EVIDENCIA_DIR.mkdir(exist_ok=True)
 # =======================================
 

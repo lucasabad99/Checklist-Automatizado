@@ -1,6 +1,6 @@
 @echo off
 title Reporte Diario - Panel de Control
-cd /d %~dp0
+cd /d %~dp0..\dashboards
 
 echo ============================================================
 echo   Panel del Reporte Diario

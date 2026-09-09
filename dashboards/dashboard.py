@@ -50,6 +50,12 @@ for _stream in (sys.stdout, sys.stderr):
 
 from flask import Flask, Response, send_file, jsonify, request, abort
 
+# dashboard.py vive en dashboards/; los módulos de chequeo individuales viven
+# en scripts-individuales/ (carpeta hermana) — hay que sumarla a sys.path
+# antes de importarlos.
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO_ROOT / "scripts-individuales"))
+
 # Importamos TU checklist tal cual. El bloque `if __name__ == "__main__"` de
 # checklist.py NO se ejecuta al importarlo, así que es seguro.
 import checklist as cl
@@ -369,7 +375,7 @@ def run():
 def evidencias():
     out = []
     for d in EVID_DIRS:
-        p = Path(d)
+        p = _REPO_ROOT / d
         if not p.exists():
             continue
         imgs = [f for f in p.glob("*") if f.suffix.lower() in IMG_EXT]
@@ -391,7 +397,7 @@ def evidencia():
     name = request.args.get("name", "")
     if d not in EVID_DIRS:
         abort(404)
-    base = Path(d).resolve()
+    base = (_REPO_ROOT / d).resolve()
     f = (base / name).resolve()
     if not str(f).startswith(str(base) + os.sep) or not f.exists():
         abort(404)  # evita path traversal

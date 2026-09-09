@@ -40,6 +40,12 @@ from flask import Flask, Response, jsonify, request, abort, send_file
 
 import check_reporte_diario as rep
 import programador_reporte
+import config_usuario
+import red_utils
+
+# check_reporte_diario ya sumó scripts-individuales/ a sys.path; acá suma
+# también la raíz del repo, donde vive setup_inicial.py.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 app = Flask(__name__)
 
@@ -68,11 +74,19 @@ MAIL_CC: list[str] = [
 # True = URLs Corporativas corre sin abrir ventanas de navegador visibles.
 HEADLESS = False
 
+# False = el panel NO arranca el programador automático (programador_reporte.py):
+# nada se refresca solo en segundo plano, todo se dispara con el botón
+# "Generar Reporte Diario". True = vuelve a refrescar WhatsUp Gold + URLs cada
+# 20 min y a correr Email Helpdesk + 3CX una vez por día, como antes.
+PROGRAMADOR_AUTOMATICO_ACTIVO = False
+
 PUERTO = 5010
 
 # ═════════════════════════════════════════════════════════════════════════════
 
-EVIDENCIAS_DIR = "evidencias_whatsupgold"
+# Absoluto (no relativo a cwd): dashboard_reporte_diario.py vive en
+# dashboards/, pero evidencias_whatsupgold/ queda en la raíz del repo.
+EVIDENCIAS_DIR = str(Path(__file__).resolve().parent.parent / "evidencias_whatsupgold")
 
 _corriendo = {"activo": False}
 
@@ -179,6 +193,16 @@ def email_preview():
 @app.route("/destinatarios")
 def destinatarios():
     return jsonify({"to": DESTINATARIO_PRINCIPAL, "cc": MAIL_CC})
+
+
+@app.route("/red")
+def red():
+    """Diagnóstico de red para el banner del panel (ver red_utils.py /
+    docs/redes_oficina_guia.pdf) — qué red(es) detecta esta PC ahora mismo."""
+    return jsonify({
+        "redes": red_utils.redes_conectadas(),
+        "avisos": red_utils.avisos_preflight(),
+    })
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -324,6 +348,10 @@ HTML = r"""<!DOCTYPE html>
   .sect{margin:30px 0 12px; font-size:12px; font-weight:700; letter-spacing:1.5px;
         color:var(--navy); text-transform:uppercase;}
   .hint{font-size:13px; color:var(--muted); margin-top:6px;}
+  .netbox{margin-top:14px; padding:11px 15px; border-radius:9px; font-size:13px;
+          background:var(--amber-soft); color:#7a4a00; border:1px solid #f0d9ad;}
+  .netbox .n1{font-weight:700; margin-bottom:3px;}
+  .netbox .n2{opacity:.9;}
 
   .modal{display:none; position:fixed; inset:0; background:rgba(15,25,45,.72); z-index:50;
          align-items:center; justify-content:center; padding:24px;}
@@ -379,6 +407,8 @@ HTML = r"""<!DOCTYPE html>
     (te va a mostrar exactamente a quién antes de confirmar).
   </div>
 
+  <div class="netbox" id="netbox" hidden></div>
+
 </div>
 
 <div class="modal" id="mReport">
@@ -400,6 +430,17 @@ function tick(){
   $("#hora").textContent  = n.toLocaleTimeString("es-AR") + " hs";
 }
 tick(); setInterval(tick, 1000);
+
+// Diagnóstico de red (ver red_utils.py) — avisa ANTES de correr el reporte
+// si falta la red de cortesía o la corporativa, en vez de que aparezca
+// recién como una falla a mitad de la corrida.
+fetch("/red").then(r => r.json()).then(d => {
+  if(!d.avisos || !d.avisos.length) return;
+  const box = $("#netbox");
+  box.hidden = false;
+  box.innerHTML = '<div class="n1">Antes de correr, revisá la red</div>' +
+    d.avisos.map(a => `<div class="n2">${a}</div>`).join("");
+}).catch(() => {});
 
 function fmt(s){ return Math.floor(s/60)+"m "+String(s%60).padStart(2,"0")+"s"; }
 
@@ -509,8 +550,22 @@ function toast(msg, kind){
 
 
 if __name__ == "__main__":
+    # Primera vez que corre esta PC/persona (no hay config_usuario.json
+    # todavía): antes de levantar el panel, corremos el asistente guiado
+    # (nombre/email + diagnóstico de red + login de WhatsUp Gold). Corridas
+    # siguientes ya tienen el archivo y este bloque no hace nada.
+    if not config_usuario.existe():
+        print("\nNo se encontró config_usuario.json — primera vez que corre "
+              "esta PC. Arrancando el asistente de configuración inicial...\n")
+        import setup_inicial
+        setup_inicial.main()
+
     rep.cargar_estado_reporte()
-    programador_reporte.iniciar()
+    if PROGRAMADOR_AUTOMATICO_ACTIVO:
+        programador_reporte.iniciar()
+    else:
+        print("[PROGRAMADOR] Desactivado (PROGRAMADOR_AUTOMATICO_ACTIVO = False) — "
+              "nada se refresca solo, todo se dispara con el botón del panel.")
 
     ip = _ip_local()
     print("\n" + "=" * 60)

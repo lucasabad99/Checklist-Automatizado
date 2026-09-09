@@ -1,6 +1,6 @@
 @echo off
 title Reporte Diario - Tablero de TV
-cd /d %~dp0
+cd /d %~dp0..\dashboards
 
 echo ============================================================
 echo   Tablero de TV

@@ -33,13 +33,15 @@ from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 # ---------------------------------------------------------------------------
 # Configuracion
 # ---------------------------------------------------------------------------
-BASE_DIR = Path(__file__).parent
+# Este script vive en scripts-individuales/; evidencias_urls/ y edge/ quedan
+# en la raíz del repo (carpeta hermana), no al lado de este archivo.
+BASE_DIR = Path(__file__).resolve().parent.parent
 EVIDENCIAS_DIR = BASE_DIR / "evidencias_urls"
 EVIDENCIAS_DIR.mkdir(exist_ok=True)
 
 EDGE_PROFILE_DIR = os.getenv(
     "EDGE_PROFILE_DIR",
-    str(BASE_DIR / "edge_profile")
+    str(BASE_DIR / "edge" / "edge_profile")
 )
 
 TIMEOUT_NAVEGACION = 30_000        # ms

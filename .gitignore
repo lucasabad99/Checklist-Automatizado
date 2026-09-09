@@ -1,4 +1,5 @@
 .env
+config_usuario.json
 descargas_rdp
 edge_profile_check
 edge_profile_citrix

@@ -39,11 +39,15 @@ SELECTOR_FEED_LISTO = [
 TIMEOUT_MS            = 30000   # 30 seg para que cargue todo
 TIMEOUT_FEED_MS       = 20000   # 20 seg adicionales esperando el feed
 
+# Este script vive en scripts-individuales/; estas carpetas quedan en la raíz
+# del repo (carpeta hermana), no al lado de este archivo.
+_REPO_ROOT_HUMAND = Path(__file__).resolve().parent.parent
+
 # Carpeta donde se guarda el perfil de Edge (queda logueado entre ejecuciones)
-PROFILE_DIR = Path(__file__).parent / "edge_profile_check"
+PROFILE_DIR = _REPO_ROOT_HUMAND / "edge" / "edge_profile_check"
 
 # Carpeta de evidencias (screenshots)
-EVIDENCIA_DIR = Path(__file__).parent / "evidencias"
+EVIDENCIA_DIR = _REPO_ROOT_HUMAND / "evidencias"
 EVIDENCIA_DIR.mkdir(exist_ok=True)
 # =======================================
 

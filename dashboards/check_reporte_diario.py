@@ -38,10 +38,18 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
+# check_reporte_diario.py vive en dashboards/; los módulos de chequeo
+# individuales viven en scripts-individuales/ (carpeta hermana) — hay que
+# sumarla a sys.path antes de importarlos.
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO_ROOT / "scripts-individuales"))
+
 import check_Llamadas3cx as tcx_mod
 import check_urls_corporativas as urls_mod
 import check_whatsupgold as wug_mod
 import enviar_mail_outlook as mail_tickets_mod
+import config_usuario
+import red_utils
 
 # Evita que una corrida manual ("Generar Reporte Diario") y el programador
 # automático (programador_reporte.py) intenten usar el mismo perfil de Edge
@@ -49,14 +57,14 @@ import enviar_mail_outlook as mail_tickets_mod
 # en uso, así que correr dos a la vez tira error en vez de convivir.
 _lock_corrida = threading.Lock()
 
-ESTADO_REPORTE_JSON = Path(__file__).parent / "estado_reporte_diario.json"
+ESTADO_REPORTE_JSON = _REPO_ROOT / "estado_reporte_diario.json"
 
 
 # ============================================================
 #                       CONFIGURACIÓN
 # ============================================================
 
-BASE_DIR = Path(__file__).parent.resolve()
+BASE_DIR = _REPO_ROOT
 
 DESTINATARIOS_MAIL = ["lucasabad80@gmail.com"]
 
@@ -918,6 +926,14 @@ def _enviar_mail_consolidado(
             mail.CC = "; ".join(cc)
         mail.Subject = asunto
 
+        # Si esta PC tiene un email guardado (config_usuario.json, lo carga
+        # setup_inicial.py) y coincide con una cuenta del perfil de Outlook,
+        # el reporte sale de esa cuenta puntual. Sin coincidencia, sigue
+        # saliendo de la cuenta default de Outlook, como siempre.
+        cuenta = config_usuario.elegir_cuenta_outlook(outlook)
+        if cuenta is not None:
+            mail.SendUsingAccount = cuenta
+
         # Antes de armar el resto del mail, confirmamos que Outlook pudo
         # resolver cada nombre/lista de distribución contra la libreta de
         # direcciones (funciona igual con nombres tipo "Apellido, Nombre" o
@@ -1412,11 +1428,32 @@ def correr_reporte_diario(headless: bool = False, progress_queue=None) -> dict:
         _lock_corrida.release()
 
 
+def intentar_iniciar_corrida() -> bool:
+    """Intenta tomar el mismo lock que usa correr_reporte_diario(), sin
+    bloquear. Pensada para programador_reporte.py: hay que envolver con esto
+    CUALQUIER paso que toque el perfil de Edge (Playwright) u Outlook —no
+    alcanza con proteger solo actualizar_parcial()— para que el ciclo
+    automático nunca conviva con una corrida manual sobre el mismo perfil.
+    Si devuelve True, hay que llamar a finalizar_corrida() en un finally."""
+    return _lock_corrida.acquire(blocking=False)
+
+
+def finalizar_corrida() -> None:
+    _lock_corrida.release()
+
+
 def _correr_reporte_diario_interno(headless: bool) -> dict:
     _log("")
     _log("=" * 70)
     _log(f"REPORTE DIARIO CONSOLIDADO — {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
     _log("=" * 70)
+
+    # Diagnóstico de red ANTES de arrancar: si falta cortesía o corporativa,
+    # mejor avisarlo acá que dejar que WhatsUp Gold / URLs / 3CX fallen y que
+    # la persona tenga que adivinar por qué (ver docs/redes_oficina_guia.pdf).
+    _log(red_utils.resumen_texto())
+    for aviso in red_utils.avisos_preflight():
+        _log(f"[REPORTE] {aviso}")
 
     # ---------------- 1. WhatsUp Gold ----------------
     _log("\n[REPORTE] >>> 1/4 WhatsUp Gold...")

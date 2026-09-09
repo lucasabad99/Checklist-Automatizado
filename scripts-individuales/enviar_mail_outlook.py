@@ -15,6 +15,8 @@ from datetime import datetime
 
 import win32com.client
 
+import config_usuario
+
 
 # ============ CONFIGURACIÓN ============
 DESTINATARIO = "tickets@pecomenergia.com.ar"
@@ -43,6 +45,15 @@ def enviar():
     mail.To      = DESTINATARIO
     mail.Subject = ASUNTO
     mail.Body    = CUERPO          # usá .HTMLBody si querés mandar HTML
+
+    # Si esta PC tiene un email guardado (config_usuario.json, lo carga
+    # setup_inicial.py) y coincide con una cuenta del perfil de Outlook,
+    # mandamos explícitamente desde esa cuenta -- útil si esa persona tiene
+    # más de una cuenta configurada. Sin coincidencia, Outlook manda con la
+    # cuenta default de siempre (cero cambio de comportamiento).
+    cuenta = config_usuario.elegir_cuenta_outlook(outlook)
+    if cuenta is not None:
+        mail.SendUsingAccount = cuenta
 
     print(f"Enviando mail a {DESTINATARIO} ...")
     mail.Send()

@@ -59,11 +59,14 @@ TIMEOUT_DETECCION_MS = 10000
 TIMEOUT_PORTAL_MS    = 20000
 POLL_INTERVAL_MS     = 200
 
+# Este script vive en scripts-individuales/; estas carpetas quedan en la raíz
+# del repo (carpeta hermana), no al lado de este archivo.
+_REPO_ROOT_CITRIX_PORTAL = Path(__file__).resolve().parent.parent
 # Reutiliza el mismo perfil de Edge que check_citrix.py, así la sesión
 # guardada (cookies / MFA recordado) sirve para los dos scripts.
-PROFILE_DIR   = Path(__file__).parent / "edge_profile_citrix"
+PROFILE_DIR   = _REPO_ROOT_CITRIX_PORTAL / "edge" / "edge_profile_citrix"
 # Evidencias separadas para no mezclarlas con las de la corrida completa.
-EVIDENCIA_DIR = Path(__file__).parent / "evidencias_citrix_portal"
+EVIDENCIA_DIR = _REPO_ROOT_CITRIX_PORTAL / "evidencias_citrix_portal"
 EVIDENCIA_DIR.mkdir(exist_ok=True)
 # =======================================
 

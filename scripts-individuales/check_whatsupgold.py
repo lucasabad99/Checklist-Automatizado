@@ -46,7 +46,9 @@ load_dotenv()
 #                       CONFIGURACIÓN
 # ============================================================
 
-BASE_DIR = Path(__file__).parent.resolve()
+# Este script vive en scripts-individuales/; perfil_wug/ y evidencias_whatsupgold/
+# quedan en la raíz del repo (carpeta hermana), no al lado de este archivo.
+BASE_DIR = Path(__file__).resolve().parent.parent
 PROFILE_DIR = BASE_DIR / "perfil_wug"
 EVIDENCIAS_DIR = BASE_DIR / "evidencias_whatsupgold"
 

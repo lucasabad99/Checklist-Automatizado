@@ -96,8 +96,9 @@ SEG_MIN_SCREENSHOT        = 8     # mínimo antes de tomar screenshot (llamada e
 SEG_ANTES_DE_COLGAR       = 3     # pausa visible entre screenshot y colgar
 SEG_ESPERAR_REGISTRO_PBX  = 10    # extra al lanzar 3CX desde cero: esperar registro PBX
 
-# Carpeta de evidencias
-EVIDENCIA_DIR = Path(__file__).parent / "evidencias"
+# Carpeta de evidencias — en la raíz del repo (este script vive en
+# scripts-individuales/, una carpeta hermana).
+EVIDENCIA_DIR = Path(__file__).resolve().parent.parent / "evidencias"
 EVIDENCIA_DIR.mkdir(exist_ok=True)
 # =======================================
 
