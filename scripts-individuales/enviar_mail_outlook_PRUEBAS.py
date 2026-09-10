@@ -1,19 +1,25 @@
 """
-Script de prueba: envía un mail usando el Outlook de escritorio
-ya autenticado en la PC. No requiere passwords.
+enviar_mail_outlook_PRUEBAS.py — VERSIÓN DE PRUEBAS.
+
+El módulo del día a día es enviar_mail_outlook.py, que quedó intacto. Esta
+copia agrega: si hay un email en config_usuario.json y coincide con una
+cuenta del perfil de Outlook, manda desde esa cuenta (mail.SendUsingAccount).
+Ver sección 9 del README.
+
+Envía un mail usando el Outlook de escritorio ya autenticado en la PC.
+No requiere passwords.
 
 Requisitos:
     - Outlook instalado y abierto (o al menos configurado con una cuenta)
     - Paquete pywin32:  pip install pywin32
-
-Uso:
-    python enviar_mail_outlook.py
 """
 
 import time
 from datetime import datetime
 
 import win32com.client
+
+import config_usuario
 
 
 # ============ CONFIGURACIÓN ============
@@ -43,6 +49,15 @@ def enviar():
     mail.To      = DESTINATARIO
     mail.Subject = ASUNTO
     mail.Body    = CUERPO          # usá .HTMLBody si querés mandar HTML
+
+    # Si esta PC tiene un email guardado (config_usuario.json, lo carga
+    # setup_inicial.py) y coincide con una cuenta del perfil de Outlook,
+    # mandamos explícitamente desde esa cuenta -- útil si esa persona tiene
+    # más de una cuenta configurada. Sin coincidencia, Outlook manda con la
+    # cuenta default de siempre (cero cambio de comportamiento).
+    cuenta = config_usuario.elegir_cuenta_outlook(outlook)
+    if cuenta is not None:
+        mail.SendUsingAccount = cuenta
 
     print(f"Enviando mail a {DESTINATARIO} ...")
     mail.Send()

@@ -14,5 +14,6 @@ evidencias_urls
 logs_http
 estado_actual.json
 estado_reporte_diario.json
+estado_reporte_diario_PRUEBAS.json
 .claude
 __pycache__

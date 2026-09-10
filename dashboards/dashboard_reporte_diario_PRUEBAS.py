@@ -1,20 +1,18 @@
 """
-dashboard_reporte_diario.py — Panel de control del Reporte Diario (Pecom Energía)
+dashboard_reporte_diario_PRUEBAS.py — VERSIÓN DE PRUEBAS del panel del Reporte Diario
 
-Es un panel DISTINTO de dashboard.py: dashboard.py corre el checklist completo
-de 8 pasos (3CX, Citrix, SAP, Portales SSO, Humand, Email, WhatsUp Gold,
-Certificados). Este panel corre específicamente check_reporte_diario.py, que
-es el flujo de 4 pasos (WhatsUp Gold, Email Helpdesk, URLs Corporativas, 3CX)
-que ya se le mostró al jefe.
+⚠ ESTO NO ES EL PANEL DEL DÍA A DÍA. El de siempre es dashboard_reporte_diario.py
+(puerto 5010), que quedó exactamente como estaba. Esta copia corre en el
+puerto 5011 y sirve para probar lo "escalable": asistente de primera vez
+(nombre/email), diagnóstico de red, y elección de cuenta de Outlook. Ver
+sección 9 del README.
 
-Control manual, a propósito: "Generar Reporte Diario" arma el reporte y NO
-manda nada. Recién con el botón "Enviar por email" (aparte, después de
-revisar el preview) se dispara el envío real a los destinatarios configurados
-abajo. Así, si algo salió mal en la corrida, nunca se manda con errores.
+Igual que el original: "Generar Reporte Diario" arma el reporte y NO manda
+nada; el envío real es aparte, después de revisar el preview.
 
 Uso:
-    python dashboard_reporte_diario.py
-    → abrí http://127.0.0.1:5010
+    python dashboard_reporte_diario_PRUEBAS.py   (o Checklist-Pruebas.ps1)
+    → abrí http://127.0.0.1:5011
 """
 
 import os
@@ -38,8 +36,14 @@ for _stream in (sys.stdout, sys.stderr):
 
 from flask import Flask, Response, jsonify, request, abort, send_file
 
-import check_reporte_diario as rep
+import check_reporte_diario_PRUEBAS as rep
 import programador_reporte
+import config_usuario
+import red_utils
+
+# check_reporte_diario_PRUEBAS ya sumó scripts-individuales/ a sys.path; acá
+# suma también la raíz del repo, donde vive setup_inicial.py.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 app = Flask(__name__)
 
@@ -74,7 +78,7 @@ HEADLESS = False
 # 20 min y a correr Email Helpdesk + 3CX una vez por día, como antes.
 PROGRAMADOR_AUTOMATICO_ACTIVO = False
 
-PUERTO = 5010
+PUERTO = 5011   # el panel del día a día usa 5010 — este corre en paralelo sin pisarlo
 
 # ═════════════════════════════════════════════════════════════════════════════
 
@@ -189,6 +193,16 @@ def destinatarios():
     return jsonify({"to": DESTINATARIO_PRINCIPAL, "cc": MAIL_CC})
 
 
+@app.route("/red")
+def red():
+    """Diagnóstico de red para el banner del panel (ver red_utils.py /
+    docs/redes_oficina_guia.pdf) — qué red(es) detecta esta PC ahora mismo."""
+    return jsonify({
+        "redes": red_utils.redes_conectadas(),
+        "avisos": red_utils.avisos_preflight(),
+    })
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  Estado para el tablero de TV (ver tablero.py)
 # ══════════════════════════════════════════════════════════════════════════════
@@ -274,7 +288,7 @@ HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Diario — Pecom Energía</title>
+<title>Reporte Diario · PRUEBAS — Pecom Energía</title>
 <style>
   :root{
     --navy:#1B3F6B; --navy-2:#16365d; --green:#1a7340; --green-soft:#e8f3ec;
@@ -332,6 +346,10 @@ HTML = r"""<!DOCTYPE html>
   .sect{margin:30px 0 12px; font-size:12px; font-weight:700; letter-spacing:1.5px;
         color:var(--navy); text-transform:uppercase;}
   .hint{font-size:13px; color:var(--muted); margin-top:6px;}
+  .netbox{margin-top:14px; padding:11px 15px; border-radius:9px; font-size:13px;
+          background:var(--amber-soft); color:#7a4a00; border:1px solid #f0d9ad;}
+  .netbox .n1{font-weight:700; margin-bottom:3px;}
+  .netbox .n2{opacity:.9;}
 
   .modal{display:none; position:fixed; inset:0; background:rgba(15,25,45,.72); z-index:50;
          align-items:center; justify-content:center; padding:24px;}
@@ -355,7 +373,7 @@ HTML = r"""<!DOCTYPE html>
     <div class="brand">
       <div class="logo">PECOM</div>
       <div class="sub">ENERGÍA</div>
-      <div class="ttl">Reporte Diario IT — Panel de Control</div>
+      <div class="ttl">Reporte Diario IT — Panel de Control · PRUEBAS (puerto 5011)</div>
     </div>
     <div class="clock">
       <div class="d" id="fecha">—</div>
@@ -387,6 +405,8 @@ HTML = r"""<!DOCTYPE html>
     (te va a mostrar exactamente a quién antes de confirmar).
   </div>
 
+  <div class="netbox" id="netbox" hidden></div>
+
 </div>
 
 <div class="modal" id="mReport">
@@ -408,6 +428,17 @@ function tick(){
   $("#hora").textContent  = n.toLocaleTimeString("es-AR") + " hs";
 }
 tick(); setInterval(tick, 1000);
+
+// Diagnóstico de red (ver red_utils.py) — avisa ANTES de correr el reporte
+// si falta la red de cortesía o la corporativa, en vez de que aparezca
+// recién como una falla a mitad de la corrida.
+fetch("/red").then(r => r.json()).then(d => {
+  if(!d.avisos || !d.avisos.length) return;
+  const box = $("#netbox");
+  box.hidden = false;
+  box.innerHTML = '<div class="n1">Antes de correr, revisá la red</div>' +
+    d.avisos.map(a => `<div class="n2">${a}</div>`).join("");
+}).catch(() => {});
 
 function fmt(s){ return Math.floor(s/60)+"m "+String(s%60).padStart(2,"0")+"s"; }
 
@@ -517,6 +548,16 @@ function toast(msg, kind){
 
 
 if __name__ == "__main__":
+    # Primera vez que corre esta PC/persona (no hay config_usuario.json
+    # todavía): antes de levantar el panel, corremos el asistente guiado
+    # (nombre/email + diagnóstico de red + login de WhatsUp Gold). Corridas
+    # siguientes ya tienen el archivo y este bloque no hace nada.
+    if not config_usuario.existe():
+        print("\nNo se encontró config_usuario.json — primera vez que corre "
+              "esta PC. Arrancando el asistente de configuración inicial...\n")
+        import setup_inicial
+        setup_inicial.main()
+
     rep.cargar_estado_reporte()
     if PROGRAMADOR_AUTOMATICO_ACTIVO:
         programador_reporte.iniciar()

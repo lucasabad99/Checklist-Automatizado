@@ -11,7 +11,7 @@ Si solo te interesa el uso diario, andá directo a la **sección 3**.
 
 ## Índice
 
-1. [Condiciones para correr esto — LEER PRIMERO](#1-condiciones-para-correr-esto--leer-primero) (incluye [1.6 Primera vez en una PC nueva](#16-primera-vez-en-una-pc-nueva--setup_inicialpy))
+1. [Condiciones para correr esto — LEER PRIMERO](#1-condiciones-para-correr-esto--leer-primero)
 2. [Mapa del repositorio](#2-mapa-del-repositorio)
 3. [Reporte Diario — uso del día a día](#3-reporte-diario--uso-del-día-a-día)
 4. [Qué está hardcodeado y dónde tocarlo](#4-qué-está-hardcodeado-y-dónde-tocarlo)
@@ -58,35 +58,17 @@ Estas carpetas **no se suben a git** (están en `.gitignore`) porque contienen c
 
 ### 1.4 Con qué cuenta corre todo esto
 
-**No hay una cuenta de servicio separada.** Todo corre con la sesión de Windows / Outlook / 3CX / Edge de la persona que ejecuta el script en ese momento — es la cuenta personal, no una cuenta genérica de IT. Esto es importante si otra persona va a correrlo: necesita **sus propias** sesiones logueadas (Outlook propio, 3CX propio, perfiles de Edge propios con su propio login en WhatsUp Gold/URLs corporativas), no puede simplemente copiar las carpetas de perfil de otra persona y esperar que funcione igual (además de que probablemente quede identificado con la sesión de quien logueó originalmente). Desde que existe `setup_inicial.py` (ver [1.6](#16-primera-vez-en-una-pc-nueva--setup_inicialpy)), ese "cada uno con lo suyo" está guiado paso a paso en vez de tener que leer esta sección entera a mano.
+**No hay una cuenta de servicio separada.** Todo corre con la sesión de Windows / Outlook / 3CX / Edge de la persona que ejecuta el script en ese momento — es la cuenta personal, no una cuenta genérica de IT. Esto es importante si otra persona va a correrlo: necesita **sus propias** sesiones logueadas (Outlook propio, 3CX propio, perfiles de Edge propios con su propio login en WhatsUp Gold/URLs corporativas), no puede simplemente copiar las carpetas de perfil de otra persona y esperar que funcione igual (además de que probablemente quede identificado con la sesión de quien logueó originalmente).
 
 ### 1.5 Archivo `.env` (credenciales)
 
 Usado principalmente por los checks del **checklist completo** (Citrix, Facilities, SSO Compras). Opcionalmente, el Reporte Diario también lo usa para automatizar el login propio de WhatsUp Gold (`WUG_USER` / `WUG_PASS` — ver [sección 4](#4-qué-está-hardcodeado-y-dónde-tocarlo)). No está en git. Ver [sección 6](#6-instalación-desde-cero-para-un-compañero--otra-pc) para el formato.
-
-### 1.6 Primera vez en una PC nueva — `setup_inicial.py`
-
-Pensado para escalar esto a cualquier compañero sin que tenga que leer todo este README: si `config_usuario.json` no existe todavía, `dashboard_reporte_diario.py` lo detecta solo al arrancar y corre el asistente `setup_inicial.py` **antes** de levantar el panel (también se puede correr a mano: `python setup_inicial.py`). Tres pasos:
-
-1. **Datos propios** — pide nombre y email corporativo, los guarda en `config_usuario.json` (no se sube a git, es por persona — como `perfil_wug/` o `.env`). A partir de ahí, el mail del reporte se manda explícitamente desde esa cuenta de Outlook si coincide con alguna de las configuradas en esa PC (si no coincide ninguna, o no se cargó nada, se sigue usando la cuenta default de Outlook, como siempre).
-2. **Diagnóstico de red** — corre `red_utils.py`, que mira las IPs de todos los adaptadores de red (con `psutil`, así detecta si la PC está conectada a cortesía y corporativa **a la vez**) y las compara contra los rangos de `redes_oficina.json` (raíz del repo, compartido para todo el equipo — ver [sección 1.1](#11-red) y `docs/redes_oficina_guia.pdf`). Avisa si falta alguna red antes de seguir, en vez de dejar que WhatsUp Gold o las URLs fallen sin explicación. El mismo diagnóstico aparece como aviso en el panel web (`/red`) cada vez que se abre.
-3. **Login de WhatsUp Gold** — abre Edge visible apuntando a WhatsUp Gold para completar el login manual (SSO/Netskope + usuario propio de WUG) una sola vez; de ahí en adelante queda guardado en `perfil_wug/` (sección 1.3).
-
-**Lo que NO toca este asistente, a propósito:** las URLs corporativas, el número al que llama 3CX, los umbrales de WhatsUp Gold y los destinatarios del reporte. Eso es configuración **compartida** para todo el equipo — vive hardcodeada en cada `check_*.py`, se define una sola vez (ver [sección 4](#4-qué-está-hardcodeado-y-dónde-tocarlo)) y todos los que actualicen el repo la usan igual, sin tener que repetirla por persona.
-
-> **Límite real de la "red correcta":** el asistente detecta y avisa, pero no puede hacer que una red llegue a un sitio que Infra no dejó pasar por ahí — hoy WhatsUp Gold *solo* funciona en cortesía+VPN, y el resto *solo* en corporativa/VPN (son requisitos distintos, no intercambiables — ver sección 1.1). Si el día de mañana cambia algún rango de IP o se suma una red nueva, se edita una sola vez en `redes_oficina.json`, sin tocar código.
 
 ---
 
 ## 2. Mapa del repositorio
 
 ```
-ONBOARDING / ESCALABILIDAD (ver sección 1.6)
-├── setup_inicial.py                ← Asistente de primera vez: datos + red + login WUG
-├── redes_oficina.json              ← Rangos de IP de cortesía/corporativa — compartido, sí se sube a git
-├── config_usuario.py               ← Helpers para leer/guardar config_usuario.json
-└── red_utils.py                    ← Detección de red (usa psutil) — en scripts-individuales/
-
 REPORTE DIARIO (producto actual)
 ├── check_reporte_diario.py        ← Lógica: corre los 4 checks, arma el HTML del mail
 ├── dashboard_reporte_diario.py    ← Panel web: correr → revisar → enviar (manual)
@@ -112,7 +94,6 @@ DATOS GENERADOS (no se suben a git)
 ├── logs_http/                      ← Resúmenes de texto del checklist completo
 ├── estado_actual.json              ← Último estado del checklist completo (dashboard.py)
 ├── perfil_wug/, edge_profile*/     ← Perfiles de Edge con sesiones guardadas
-├── config_usuario.json             ← Nombre/email de quien corre esto en esta PC — no versionado
 └── .env                            ← Credenciales (Citrix, SSO) — no versionado
 ```
 
@@ -171,8 +152,6 @@ El tablero en sí **no ejecuta nada** — solo lee `/estado.json` cada 30 segund
 | Hora de la corrida diaria (Email Helpdesk + 3CX) | `programador_reporte.py` → `HORA_DIARIA` | `"08:00"` |
 | Si WhatsUp Gold entra al ciclo rápido de 20 min | `programador_reporte.py` → `WUG_AUTO_REFRESH` | `False` (headless no funciona por Netskope — ver sección 3.2) |
 | Login propio de WhatsUp Gold (opcional, automatiza lo que hoy se tipea a mano) | `.env` → `WUG_USER` / `WUG_PASS` | Sin configurar = sigue pidiendo login manual |
-| Rangos de IP de cortesía / corporativa (para el diagnóstico de red) | `redes_oficina.json` (raíz, sí se sube a git) | `172.16.` = corporativa, `192.168.11.` = cortesía |
-| Nombre / email de quien corre esto en esta PC | `config_usuario.json` (no versionado, lo carga `setup_inicial.py`) | Sin configurar = se sigue usando la cuenta default de Outlook, como siempre |
 
 Todos estos son variables sueltas al principio de cada archivo, comentadas — no hace falta tocar el resto del código para cambiarlas.
 
@@ -232,9 +211,7 @@ WUG_PASS=tu_password_whatsupgold
 
 ### 6.4 Primera corrida (con ventanas visibles)
 
-La primera vez, corré `python dashboard_reporte_diario.py` (o `Checklist-Portable.ps1`) **con la pantalla a la vista**. Como todavía no existe `config_usuario.json`, arranca solo el asistente `setup_inicial.py` (ver [sección 1.6](#16-primera-vez-en-una-pc-nueva--setup_inicialpy)): pide nombre/email, diagnostica la red, y abre WhatsUp Gold en Edge para el login manual único. Al terminar, sigue directo al panel de siempre.
-
-Si además falta sesión guardada para **URLs Corporativas** (`edge_profile/`), esa parte se resuelve aparte: al apretar "Generar Reporte Diario" por primera vez va a abrir una ventana de Edge pidiendo login ahí también. Con `WUG_USER`/`WUG_PASS` configurados en `.env`, el asistente completa el login de WhatsUp Gold solo; si no, hay que loguearse a mano esa vez (las corridas siguientes ya no piden nada mientras la sesión no expire).
+La primera vez, corré `python dashboard_reporte_diario.py` y apretá "Generar Reporte Diario" **con la pantalla a la vista**: si WhatsUp Gold o URLs Corporativas todavía no tienen sesión guardada, va a abrir una ventana de Edge pidiendo login. Con `WUG_USER`/`WUG_PASS` configurados en `.env`, WhatsUp Gold completa el login solo; si no, hay que loguearse a mano esa vez (las corridas siguientes ya no piden nada mientras la sesión no expire).
 
 ### 6.5 Conectividad
 
@@ -324,3 +301,28 @@ CARGO_REMITENTE   = "IT & Innovación"
 |--------|-------------|
 | `0` | Todas las verificaciones pasaron correctamente |
 | `1` | Una o más verificaciones fallaron |
+
+---
+
+## 9. Stack de PRUEBAS (experimental — NO afecta el uso diario)
+
+Copia paralela del Reporte Diario para probar la parte "escalable" (que un
+compañero nuevo lo levante sin leer todo este README) sin tocar el flujo que
+ya funciona. Los archivos del día a día quedan **exactamente como estaban**.
+
+| Archivo | Qué es |
+|---|---|
+| `dashboards/dashboard_reporte_diario_PRUEBAS.py` | Panel de pruebas — **puerto 5011** (el normal sigue en 5010), corre en paralelo sin pisarse |
+| `dashboards/check_reporte_diario_PRUEBAS.py` | Igual que el original + diagnóstico de red antes de correr + elección de cuenta de Outlook. Usa su propio `estado_reporte_diario_PRUEBAS.json` |
+| `scripts-individuales/enviar_mail_outlook_PRUEBAS.py` | Igual + elige la cuenta de Outlook según `config_usuario.json` |
+| `setup_inicial.py` | Asistente de primera vez: pide nombre/email → diagnostica red → abre WhatsUp Gold para el login. Lo dispara solo el panel de PRUEBAS si no existe `config_usuario.json` |
+| `scripts-individuales/red_utils.py` | Detección de red cortesía/corporativa (IPs de todos los adaptadores vía `psutil`) contra `redes_oficina.json` |
+| `scripts-individuales/config_usuario.py` + `config_usuario.json` | Nombre/email por persona (el `.json` no se sube a git) |
+| `redes_oficina.json` | Rangos de IP de cada red — compartido, sí se sube a git |
+| `Checklist-Pruebas.ps1` | Lanzador del stack de pruebas (equivale a `Checklist-Portable.ps1` pero para la versión experimental) |
+
+**Cómo probarlo:** correr `Checklist-Pruebas.ps1` (o `python dashboards/dashboard_reporte_diario_PRUEBAS.py`) → abre en http://127.0.0.1:5011. La primera vez arranca el asistente `setup_inicial.py`.
+
+**Cómo se promueve a "oficial":** cuando esté validado, se reemplazan los 3
+archivos del día a día por sus versiones `_PRUEBAS` (quitando el sufijo y
+volviendo el puerto a 5010) y se borra este stack.

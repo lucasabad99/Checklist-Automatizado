@@ -3,8 +3,12 @@ setup_inicial.py
 -----------------
 Asistente de primera configuración para un compañero nuevo que va a correr
 el Reporte Diario en su propia PC por primera vez. Se corre UNA sola vez por
-persona/PC -- después queda todo guardado y las corridas normales
-(dashboard_reporte_diario.py) no vuelven a pedir nada de esto.
+persona/PC -- después queda todo guardado y no vuelve a pedir nada.
+
+PARTE DEL STACK DE PRUEBAS (ver sección 9 del README). Lo dispara solo el
+panel de pruebas (dashboard_reporte_diario_PRUEBAS.py, puerto 5011). El panel
+del día a día (dashboard_reporte_diario.py, puerto 5010) NO lo usa y quedó
+igual que siempre.
 
 Qué hace:
     1. Pide nombre y email corporativo → se guardan en config_usuario.json
@@ -110,9 +114,9 @@ def main() -> None:
     paso_2_red()
     paso_3_whatsupgold()
     print("\n" + "=" * 64)
-    print("  Listo. De acá en más corré:")
-    print("    python dashboards\\dashboard_reporte_diario.py")
-    print("  (o Checklist-Portable.ps1)")
+    print("  Listo. El panel de PRUEBAS ya puede arrancar (puerto 5011).")
+    print("  Se levanta solo si viniste desde Checklist-Pruebas.ps1 /")
+    print("  dashboard_reporte_diario_PRUEBAS.py.")
     print("=" * 64)
 
 

@@ -1,6 +1,11 @@
 """
-check_reporte_diario.py
------------------------
+check_reporte_diario_PRUEBAS.py
+-------------------------------
+VERSIÓN DE PRUEBAS. El módulo del día a día es check_reporte_diario.py, que
+quedó intacto. Esta copia agrega el diagnóstico de red antes de correr y la
+elección de cuenta de Outlook, y usa su propio estado_reporte_diario_PRUEBAS.json.
+Ver sección 9 del README.
+
 Reporte consolidado diario del Checklist IT - Pecom Energía.
 
 Une (por ahora) los datos de WhatsUp Gold + Email Helpdesk + Accesos Remotos
@@ -47,7 +52,9 @@ sys.path.insert(0, str(_REPO_ROOT / "scripts-individuales"))
 import check_Llamadas3cx as tcx_mod
 import check_urls_corporativas as urls_mod
 import check_whatsupgold as wug_mod
-import enviar_mail_outlook as mail_tickets_mod
+import enviar_mail_outlook_PRUEBAS as mail_tickets_mod
+import config_usuario
+import red_utils
 
 # Evita que una corrida manual ("Generar Reporte Diario") y el programador
 # automático (programador_reporte.py) intenten usar el mismo perfil de Edge
@@ -55,7 +62,7 @@ import enviar_mail_outlook as mail_tickets_mod
 # en uso, así que correr dos a la vez tira error en vez de convivir.
 _lock_corrida = threading.Lock()
 
-ESTADO_REPORTE_JSON = _REPO_ROOT / "estado_reporte_diario.json"
+ESTADO_REPORTE_JSON = _REPO_ROOT / "estado_reporte_diario_PRUEBAS.json"
 
 
 # ============================================================
@@ -924,6 +931,14 @@ def _enviar_mail_consolidado(
             mail.CC = "; ".join(cc)
         mail.Subject = asunto
 
+        # Si esta PC tiene un email guardado (config_usuario.json, lo carga
+        # setup_inicial.py) y coincide con una cuenta del perfil de Outlook,
+        # el reporte sale de esa cuenta puntual. Sin coincidencia, sigue
+        # saliendo de la cuenta default de Outlook, como siempre.
+        cuenta = config_usuario.elegir_cuenta_outlook(outlook)
+        if cuenta is not None:
+            mail.SendUsingAccount = cuenta
+
         # Antes de armar el resto del mail, confirmamos que Outlook pudo
         # resolver cada nombre/lista de distribución contra la libreta de
         # direcciones (funciona igual con nombres tipo "Apellido, Nombre" o
@@ -1437,6 +1452,13 @@ def _correr_reporte_diario_interno(headless: bool) -> dict:
     _log("=" * 70)
     _log(f"REPORTE DIARIO CONSOLIDADO — {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
     _log("=" * 70)
+
+    # Diagnóstico de red ANTES de arrancar: si falta cortesía o corporativa,
+    # mejor avisarlo acá que dejar que WhatsUp Gold / URLs / 3CX fallen y que
+    # la persona tenga que adivinar por qué (ver docs/redes_oficina_guia.pdf).
+    _log(red_utils.resumen_texto())
+    for aviso in red_utils.avisos_preflight():
+        _log(f"[REPORTE] {aviso}")
 
     # ---------------- 1. WhatsUp Gold ----------------
     _log("\n[REPORTE] >>> 1/4 WhatsUp Gold...")
