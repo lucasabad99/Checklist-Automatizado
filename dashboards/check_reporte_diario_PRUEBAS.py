@@ -54,7 +54,6 @@ import check_urls_corporativas as urls_mod
 import check_whatsupgold as wug_mod
 import enviar_mail_outlook_PRUEBAS as mail_tickets_mod
 import config_usuario
-import red_utils
 
 # Evita que una corrida manual ("Generar Reporte Diario") y el programador
 # automático (programador_reporte.py) intenten usar el mismo perfil de Edge
@@ -1452,13 +1451,6 @@ def _correr_reporte_diario_interno(headless: bool) -> dict:
     _log("=" * 70)
     _log(f"REPORTE DIARIO CONSOLIDADO — {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
     _log("=" * 70)
-
-    # Diagnóstico de red ANTES de arrancar: si falta cortesía o corporativa,
-    # mejor avisarlo acá que dejar que WhatsUp Gold / URLs / 3CX fallen y que
-    # la persona tenga que adivinar por qué (ver docs/redes_oficina_guia.pdf).
-    _log(red_utils.resumen_texto())
-    for aviso in red_utils.avisos_preflight():
-        _log(f"[REPORTE] {aviso}")
 
     # ---------------- 1. WhatsUp Gold ----------------
     _log("\n[REPORTE] >>> 1/4 WhatsUp Gold...")

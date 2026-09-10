@@ -39,7 +39,6 @@ from flask import Flask, Response, jsonify, request, abort, send_file
 import check_reporte_diario_PRUEBAS as rep
 import programador_reporte
 import config_usuario
-import red_utils
 
 # check_reporte_diario_PRUEBAS ya sumó scripts-individuales/ a sys.path; acá
 # suma también la raíz del repo, donde vive setup_inicial.py.
@@ -193,16 +192,6 @@ def destinatarios():
     return jsonify({"to": DESTINATARIO_PRINCIPAL, "cc": MAIL_CC})
 
 
-@app.route("/red")
-def red():
-    """Diagnóstico de red para el banner del panel (ver red_utils.py /
-    docs/redes_oficina_guia.pdf) — qué red(es) detecta esta PC ahora mismo."""
-    return jsonify({
-        "redes": red_utils.redes_conectadas(),
-        "avisos": red_utils.avisos_preflight(),
-    })
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 #  Estado para el tablero de TV (ver tablero.py)
 # ══════════════════════════════════════════════════════════════════════════════
@@ -346,10 +335,6 @@ HTML = r"""<!DOCTYPE html>
   .sect{margin:30px 0 12px; font-size:12px; font-weight:700; letter-spacing:1.5px;
         color:var(--navy); text-transform:uppercase;}
   .hint{font-size:13px; color:var(--muted); margin-top:6px;}
-  .netbox{margin-top:14px; padding:11px 15px; border-radius:9px; font-size:13px;
-          background:var(--amber-soft); color:#7a4a00; border:1px solid #f0d9ad;}
-  .netbox .n1{font-weight:700; margin-bottom:3px;}
-  .netbox .n2{opacity:.9;}
 
   .modal{display:none; position:fixed; inset:0; background:rgba(15,25,45,.72); z-index:50;
          align-items:center; justify-content:center; padding:24px;}
@@ -405,8 +390,6 @@ HTML = r"""<!DOCTYPE html>
     (te va a mostrar exactamente a quién antes de confirmar).
   </div>
 
-  <div class="netbox" id="netbox" hidden></div>
-
 </div>
 
 <div class="modal" id="mReport">
@@ -428,17 +411,6 @@ function tick(){
   $("#hora").textContent  = n.toLocaleTimeString("es-AR") + " hs";
 }
 tick(); setInterval(tick, 1000);
-
-// Diagnóstico de red (ver red_utils.py) — avisa ANTES de correr el reporte
-// si falta la red de cortesía o la corporativa, en vez de que aparezca
-// recién como una falla a mitad de la corrida.
-fetch("/red").then(r => r.json()).then(d => {
-  if(!d.avisos || !d.avisos.length) return;
-  const box = $("#netbox");
-  box.hidden = false;
-  box.innerHTML = '<div class="n1">Antes de correr, revisá la red</div>' +
-    d.avisos.map(a => `<div class="n2">${a}</div>`).join("");
-}).catch(() => {});
 
 function fmt(s){ return Math.floor(s/60)+"m "+String(s%60).padStart(2,"0")+"s"; }
 

@@ -15,9 +15,7 @@ Qué hace:
        (NO se sube a git, es específico de cada persona, como perfil_wug/ o
        el .env). Se usa para que el mail del reporte salga de LA CUENTA de
        Outlook correcta, si esa persona tiene más de una cuenta configurada.
-    2. Revisa a qué red(es) de la oficina está conectada esta PC ahora mismo
-       (ver docs/redes_oficina_guia.pdf) y avisa si falta alguna.
-    3. Abre WhatsUp Gold en una ventana de Edge VISIBLE para completar el
+    2. Abre WhatsUp Gold en una ventana de Edge VISIBLE para completar el
        login manual (SSO/Netskope + usuario propio de WUG) una sola vez --
        de ahí en adelante la sesión queda guardada en perfil_wug/ y no
        vuelve a pedirse (ver sección 1.3 del README).
@@ -43,7 +41,6 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 import config_usuario
-import red_utils
 
 
 def _pedir(msg: str, obligatorio: bool = True) -> str:
@@ -56,7 +53,7 @@ def _pedir(msg: str, obligatorio: bool = True) -> str:
 
 def paso_1_datos_usuario() -> None:
     print("\n" + "=" * 64)
-    print("  PASO 1/3 — Tus datos")
+    print("  PASO 1/2 — Tus datos")
     print("=" * 64)
     if config_usuario.existe():
         actual = config_usuario.cargar() or {}
@@ -70,23 +67,9 @@ def paso_1_datos_usuario() -> None:
     print("✓ Guardado en config_usuario.json")
 
 
-def paso_2_red() -> None:
+def paso_2_whatsupgold() -> None:
     print("\n" + "=" * 64)
-    print("  PASO 2/3 — Red")
-    print("=" * 64)
-    print(red_utils.resumen_texto())
-    avisos = red_utils.avisos_preflight()
-    if avisos:
-        for a in avisos:
-            print(a)
-    else:
-        print("Se detectan todas las redes conocidas -- listo para seguir.")
-    _pedir("\nPresioná Enter para continuar...", obligatorio=False)
-
-
-def paso_3_whatsupgold() -> None:
-    print("\n" + "=" * 64)
-    print("  PASO 3/3 — Login de WhatsUp Gold")
+    print("  PASO 2/2 — Login de WhatsUp Gold")
     print("=" * 64)
     print("Se va a abrir una ventana de Edge. Si pide login (SSO/Netskope")
     print("y/o usuario propio de WhatsUp Gold), completalo a mano esta vez")
@@ -111,8 +94,7 @@ def paso_3_whatsupgold() -> None:
 def main() -> None:
     print("Asistente de configuración inicial — Reporte Diario IT (Pecom Energía)")
     paso_1_datos_usuario()
-    paso_2_red()
-    paso_3_whatsupgold()
+    paso_2_whatsupgold()
     print("\n" + "=" * 64)
     print("  Listo. El panel de PRUEBAS ya puede arrancar (puerto 5011).")
     print("  Se levanta solo si viniste desde Checklist-Pruebas.ps1 /")

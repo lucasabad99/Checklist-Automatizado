@@ -313,15 +313,15 @@ ya funciona. Los archivos del día a día quedan **exactamente como estaban**.
 | Archivo | Qué es |
 |---|---|
 | `dashboards/dashboard_reporte_diario_PRUEBAS.py` | Panel de pruebas — **puerto 5011** (el normal sigue en 5010), corre en paralelo sin pisarse |
-| `dashboards/check_reporte_diario_PRUEBAS.py` | Igual que el original + diagnóstico de red antes de correr + elección de cuenta de Outlook. Usa su propio `estado_reporte_diario_PRUEBAS.json` |
+| `dashboards/check_reporte_diario_PRUEBAS.py` | Igual que el original + elección de cuenta de Outlook. Usa su propio `estado_reporte_diario_PRUEBAS.json` |
 | `scripts-individuales/enviar_mail_outlook_PRUEBAS.py` | Igual + elige la cuenta de Outlook según `config_usuario.json` |
-| `setup_inicial.py` | Asistente de primera vez: pide nombre/email → diagnostica red → abre WhatsUp Gold para el login. Lo dispara solo el panel de PRUEBAS si no existe `config_usuario.json` |
-| `scripts-individuales/red_utils.py` | Detección de red cortesía/corporativa (IPs de todos los adaptadores vía `psutil`) contra `redes_oficina.json` |
+| `setup_inicial.py` | Asistente de primera vez: pide nombre/email → abre WhatsUp Gold para el login. Lo dispara solo el panel de PRUEBAS si no existe `config_usuario.json` |
 | `scripts-individuales/config_usuario.py` + `config_usuario.json` | Nombre/email por persona (el `.json` no se sube a git) |
-| `redes_oficina.json` | Rangos de IP de cada red — compartido, sí se sube a git |
 | `Checklist-Pruebas.ps1` | Lanzador del stack de pruebas (equivale a `Checklist-Portable.ps1` pero para la versión experimental) |
 
 **Cómo probarlo:** correr `Checklist-Pruebas.ps1` (o `python dashboards/dashboard_reporte_diario_PRUEBAS.py`) → abre en http://127.0.0.1:5011. La primera vez arranca el asistente `setup_inicial.py`.
+
+> La detección automática de red (avisos "revisá la red") se sacó — daba falsos positivos. El requisito de red sigue estando en la [sección 1.1](#11-red), a mano.
 
 **Cómo se promueve a "oficial":** cuando esté validado, se reemplazan los 3
 archivos del día a día por sus versiones `_PRUEBAS` (quitando el sufijo y
